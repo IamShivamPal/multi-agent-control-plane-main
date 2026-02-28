@@ -1,0 +1,444 @@
+{
+  "agent_id": "agent-ad78a37f",
+  "current_state": "shutting_down",
+  "history": [
+    {
+      "timestamp": "2026-02-14T10:03:13.157682",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "initialization"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:18.156659",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:18.158335",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:18.161581",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:18.235132",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "manual_event_received",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:18.235146",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:18.245332",
+      "agent_id": "agent-ad78a37f",
+      "state": "deciding",
+      "reason": "making_decision",
+      "from_state": "validating",
+      "transition": "validating -> deciding"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:22.348950",
+      "agent_id": "agent-ad78a37f",
+      "state": "enforcing",
+      "reason": "governance_enforcement",
+      "from_state": "deciding",
+      "transition": "deciding -> enforcing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:22.349774",
+      "agent_id": "agent-ad78a37f",
+      "state": "acting",
+      "reason": "executing_action",
+      "from_state": "enforcing",
+      "transition": "enforcing -> acting"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:22.353512",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing_results",
+      "reason": "observing_results",
+      "from_state": "acting",
+      "transition": "acting -> observing_results"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:22.354666",
+      "agent_id": "agent-ad78a37f",
+      "state": "explaining",
+      "reason": "explaining_decision",
+      "from_state": "observing_results",
+      "transition": "observing_results -> explaining"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:22.357166",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "manual_loop_complete",
+      "from_state": "explaining",
+      "transition": "explaining -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:23.162316",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:23.164452",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:23.166835",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:28.167592",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:28.169363",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:28.171490",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:33.172527",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:33.174668",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:33.177698",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:38.178486",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:38.181870",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:38.185378",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:43.186701",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:43.188581",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:43.190500",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:48.191805",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:48.193618",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:48.195578",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:53.196372",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:53.198177",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:53.199908",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:58.200314",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:58.204310",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:03:58.207917",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:03.209367",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:03.212313",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:03.216635",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:08.218455",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:08.220217",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:08.222657",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:13.223674",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:13.225585",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:13.227849",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:18.228425",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:18.230119",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:18.232235",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:23.232884",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:23.234941",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:23.239107",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:28.240073",
+      "agent_id": "agent-ad78a37f",
+      "state": "observing",
+      "reason": "sensing_environment",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:28.241708",
+      "agent_id": "agent-ad78a37f",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:28.243630",
+      "agent_id": "agent-ad78a37f",
+      "state": "idle",
+      "reason": "loop_complete",
+      "from_state": "validating",
+      "transition": "validating -> idle"
+    },
+    {
+      "timestamp": "2026-02-14T10:04:33.245091",
+      "agent_id": "agent-ad78a37f",
+      "state": "shutting_down",
+      "reason": "shutdown_requested",
+      "from_state": "idle",
+      "transition": "idle -> shutting_down"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+timestamp,app_name,failure_state,severity,resolved
+2026-02-13 13:00:41.865232,app-1,high_memory,high,True
+2026-02-13 13:05:41.865232,app-2,crash,medium,True
+2026-02-13 13:10:41.865232,app-3,high_memory,medium,True
+2026-02-13 13:15:41.865232,app-1,high_memory,low,False
+2026-02-13 13:20:41.865232,app-2,network_error,high,True
+2026-02-13 13:25:41.865232,app-3,high_cpu,high,True
+2026-02-13 13:30:41.865232,app-1,network_error,low,True
+2026-02-13 13:35:41.865232,app-2,crash,high,True
+2026-02-13 13:40:41.865232,app-3,timeout,high,True
+2026-02-13 13:45:41.865232,app-1,high_memory,critical,False
+2026-02-13 13:50:41.865232,app-2,network_error,high,True
+2026-02-13 13:55:41.865232,app-3,high_memory,high,True

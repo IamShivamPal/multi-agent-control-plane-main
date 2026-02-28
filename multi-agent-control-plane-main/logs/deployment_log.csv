@@ -1,0 +1,11 @@
+timestamp,app_name,environment,status,deploy_time_sec
+2026-02-13 13:00:41.865232,app-1,dev,success,56
+2026-02-13 13:05:41.865232,app-2,stage,success,45
+2026-02-13 13:10:41.865232,app-3,prod,success,111
+2026-02-13 13:15:41.865232,app-1,dev,success,95
+2026-02-13 13:20:41.865232,app-2,stage,success,56
+2026-02-13 13:25:41.865232,app-3,prod,success,38
+2026-02-13 13:30:41.865232,app-1,dev,success,31
+2026-02-13 13:35:41.865232,app-2,stage,success,85
+2026-02-13 13:40:41.865232,app-3,prod,success,106
+2026-02-13 13:45:41.865232,app-1,dev,success,55

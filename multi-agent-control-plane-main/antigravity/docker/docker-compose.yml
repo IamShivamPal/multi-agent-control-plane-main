@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  runtime:
+    build:
+      context: ../services/runtime
+    ports:
+      - "8001:8001"
+    environment:
+      - AGENT_URL=http://agent:8002
+      - ORCHESTRATOR_URL=http://orchestrator:8003
+      - REQUEST_TIMEOUT=5
+    depends_on:
+      - agent
+      - orchestrator
+    networks:
+      - antigravity
+
+  agent:
+    build:
+      context: ../services/agent
+    ports:
+      - "8002:8002"
+    networks:
+      - antigravity
+
+  orchestrator:
+    build:
+      context: ../services/orchestrator
+    ports:
+      - "8003:8003"
+    environment:
+      - DEMO_MODE=false
+    networks:
+      - antigravity
+
+networks:
+  antigravity:
+    driver: bridge

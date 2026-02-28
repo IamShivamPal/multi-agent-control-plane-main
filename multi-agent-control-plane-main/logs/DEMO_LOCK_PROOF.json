@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-02-14T18:57:04.320889",
+  "url": "http://localhost:5000",
+  "environment": "stage",
+  "scenarios": [
+    {
+      "scenario": "Crash in dev -> restart",
+      "input": {
+        "app": "test-api",
+        "env": "dev",
+        "state": "crashed",
+        "latency_ms": 100,
+        "errors_last_min": 10,
+        "workers": 2
+      },
+      "decision": {
+        "action": "restart_service",
+        "explanation": "Restart crashed service in dev",
+        "confidence": 0.9
+      },
+      "status": "PASS",
+      "ui_crash": false,
+      "q_table_exposed": false,
+      "explanation_shown": true,
+      "environment_gate_respected": true
+    },
+    {
+      "scenario": "Overload in stage -> scale_up",
+      "input": {
+        "app": "test-api",
+        "env": "stage",
+        "state": "degraded",
+        "latency_ms": 350,
+        "errors_last_min": 3,
+        "workers": 2
+      },
+      "decision": {
+        "action": "scale_up",
+        "explanation": "Deterministic scale for overload in stage",
+        "confidence": 1.0
+      },
+      "status": "PASS",
+      "ui_crash": false,
+      "q_table_exposed": false,
+      "explanation_shown": true,
+      "environment_gate_respected": true
+    },
+    {
+      "scenario": "Overload in prod -> noop",
+      "input": {
+        "app": "test-api",
+        "env": "prod",
+        "state": "degraded",
+        "latency_ms": 400,
+        "errors_last_min": 5,
+        "workers": 2
+      },
+      "decision": {
+        "action": "noop",
+        "explanation": "Production freeze mode - no actions allowed",
+        "confidence": 1.0
+      },
+      "status": "PASS",
+      "ui_crash": false,
+      "q_table_exposed": false,
+      "explanation_shown": true,
+      "environment_gate_respected": true
+    },
+    {
+      "scenario": "New app ingestion -> observation",
+      "input": {
+        "app": "new-api",
+        "env": "stage",
+        "state": "running",
+        "latency_ms": 50,
+        "errors_last_min": 0,
+        "workers": 1
+      },
+      "decision": {
+        "action": "observe",
+        "explanation": "New app - observation mode",
+        "confidence": 0.5
+      },
+      "status": "PASS",
+      "ui_crash": false,
+      "q_table_exposed": false,
+      "explanation_shown": true,
+      "environment_gate_respected": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "ui_crashes": 0,
+    "q_table_exposures": 0
+  },
+  "determinism_confirmed": true,
+  "validation": "PASS"
+}

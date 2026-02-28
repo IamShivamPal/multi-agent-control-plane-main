@@ -1,0 +1,9 @@
+timestamp,user_id,rating,feedback_type,resolved
+2026-02-13 13:00:41.865232,user-1,5,question,True
+2026-02-13 13:05:41.865232,user-2,2,question,True
+2026-02-13 13:10:41.865232,user-3,1,question,True
+2026-02-13 13:15:41.865232,user-4,3,bug,False
+2026-02-13 13:20:41.865232,user-5,4,bug,False
+2026-02-13 13:25:41.865232,user-1,1,feature,True
+2026-02-13 13:30:41.865232,user-2,1,feature,True
+2026-02-13 13:35:41.865232,user-3,4,question,True

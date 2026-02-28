@@ -1,0 +1,252 @@
+{
+  "agent_id": "agent-92ccda83",
+  "current_state": "shutting_down",
+  "history": [
+    {
+      "timestamp": "2026-02-20T07:19:44.433370",
+      "agent_id": "agent-92ccda83",
+      "state": "idle",
+      "reason": "initialization"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:29.158400",
+      "agent_id": "agent-92ccda83",
+      "state": "observing",
+      "reason": "manual_event_received",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:29.158413",
+      "agent_id": "agent-92ccda83",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:29.159538",
+      "agent_id": "agent-92ccda83",
+      "state": "deciding",
+      "reason": "making_decision",
+      "from_state": "validating",
+      "transition": "validating -> deciding"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:29.161371",
+      "agent_id": "agent-92ccda83",
+      "state": "enforcing",
+      "reason": "governance_enforcement",
+      "from_state": "deciding",
+      "transition": "deciding -> enforcing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:29.161981",
+      "agent_id": "agent-92ccda83",
+      "state": "acting",
+      "reason": "executing_action",
+      "from_state": "enforcing",
+      "transition": "enforcing -> acting"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.451184",
+      "agent_id": "agent-92ccda83",
+      "state": "observing_results",
+      "reason": "observing_results",
+      "from_state": "acting",
+      "transition": "acting -> observing_results"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.452120",
+      "agent_id": "agent-92ccda83",
+      "state": "explaining",
+      "reason": "explaining_decision",
+      "from_state": "observing_results",
+      "transition": "observing_results -> explaining"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.453517",
+      "agent_id": "agent-92ccda83",
+      "state": "idle",
+      "reason": "manual_loop_complete",
+      "from_state": "explaining",
+      "transition": "explaining -> idle"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.453539",
+      "agent_id": "agent-92ccda83",
+      "state": "observing",
+      "reason": "manual_event_received",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.453544",
+      "agent_id": "agent-92ccda83",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.454928",
+      "agent_id": "agent-92ccda83",
+      "state": "deciding",
+      "reason": "making_decision",
+      "from_state": "validating",
+      "transition": "validating -> deciding"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.457584",
+      "agent_id": "agent-92ccda83",
+      "state": "enforcing",
+      "reason": "governance_enforcement",
+      "from_state": "deciding",
+      "transition": "deciding -> enforcing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:31.458203",
+      "agent_id": "agent-92ccda83",
+      "state": "acting",
+      "reason": "executing_action",
+      "from_state": "enforcing",
+      "transition": "enforcing -> acting"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.690720",
+      "agent_id": "agent-92ccda83",
+      "state": "observing_results",
+      "reason": "observing_results",
+      "from_state": "acting",
+      "transition": "acting -> observing_results"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.691957",
+      "agent_id": "agent-92ccda83",
+      "state": "explaining",
+      "reason": "explaining_decision",
+      "from_state": "observing_results",
+      "transition": "observing_results -> explaining"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.693680",
+      "agent_id": "agent-92ccda83",
+      "state": "idle",
+      "reason": "manual_loop_complete",
+      "from_state": "explaining",
+      "transition": "explaining -> idle"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.693699",
+      "agent_id": "agent-92ccda83",
+      "state": "observing",
+      "reason": "manual_event_received",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.693703",
+      "agent_id": "agent-92ccda83",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.694716",
+      "agent_id": "agent-92ccda83",
+      "state": "deciding",
+      "reason": "making_decision",
+      "from_state": "validating",
+      "transition": "validating -> deciding"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.696767",
+      "agent_id": "agent-92ccda83",
+      "state": "enforcing",
+      "reason": "governance_enforcement",
+      "from_state": "deciding",
+      "transition": "deciding -> enforcing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:33.697404",
+      "agent_id": "agent-92ccda83",
+      "state": "acting",
+      "reason": "executing_action",
+      "from_state": "enforcing",
+      "transition": "enforcing -> acting"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.915567",
+      "agent_id": "agent-92ccda83",
+      "state": "observing_results",
+      "reason": "observing_results",
+      "from_state": "acting",
+      "transition": "acting -> observing_results"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.916572",
+      "agent_id": "agent-92ccda83",
+      "state": "explaining",
+      "reason": "explaining_decision",
+      "from_state": "observing_results",
+      "transition": "observing_results -> explaining"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.917862",
+      "agent_id": "agent-92ccda83",
+      "state": "idle",
+      "reason": "manual_loop_complete",
+      "from_state": "explaining",
+      "transition": "explaining -> idle"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.917878",
+      "agent_id": "agent-92ccda83",
+      "state": "observing",
+      "reason": "manual_event_received",
+      "from_state": "idle",
+      "transition": "idle -> observing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.917882",
+      "agent_id": "agent-92ccda83",
+      "state": "validating",
+      "reason": "validating_observation",
+      "from_state": "observing",
+      "transition": "observing -> validating"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.918749",
+      "agent_id": "agent-92ccda83",
+      "state": "deciding",
+      "reason": "making_decision",
+      "from_state": "validating",
+      "transition": "validating -> deciding"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.920776",
+      "agent_id": "agent-92ccda83",
+      "state": "enforcing",
+      "reason": "governance_enforcement",
+      "from_state": "deciding",
+      "transition": "deciding -> enforcing"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.921339",
+      "agent_id": "agent-92ccda83",
+      "state": "idle",
+      "reason": "manual_loop_complete",
+      "from_state": "enforcing",
+      "transition": "enforcing -> idle"
+    },
+    {
+      "timestamp": "2026-02-20T07:20:37.921615",
+      "agent_id": "agent-92ccda83",
+      "state": "shutting_down",
+      "reason": "shutdown_requested",
+      "from_state": "idle",
+      "transition": "idle -> shutting_down"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "agent_id": "agent-f0d71f73",
+  "timestamp": "2026-02-14T08:42:44.614255",
+  "memory_stats": {
+    "agent_id": "agent-f0d71f73",
+    "created_at": "2026-02-14T08:31:18.948908",
+    "decision_count": 0,
+    "decision_capacity": 50,
+    "decision_utilization": "0.0%",
+    "app_count": 0,
+    "total_app_states": 0,
+    "max_states_per_app": 10,
+    "total_decisions_seen": 0,
+    "total_states_seen": 0,
+    "decisions_evicted": 0
+  },
+  "recent_decisions": [],
+  "app_states": {}
+}

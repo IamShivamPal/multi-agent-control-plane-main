@@ -1,0 +1,19 @@
+{
+  "agent_id": "agent-5a7e4fe5",
+  "timestamp": "2026-02-14T06:45:46.393928",
+  "memory_stats": {
+    "agent_id": "agent-5a7e4fe5",
+    "created_at": "2026-02-14T06:39:32.812201",
+    "decision_count": 0,
+    "decision_capacity": 50,
+    "decision_utilization": "0.0%",
+    "app_count": 0,
+    "total_app_states": 0,
+    "max_states_per_app": 10,
+    "total_decisions_seen": 0,
+    "total_states_seen": 0,
+    "decisions_evicted": 0
+  },
+  "recent_decisions": [],
+  "app_states": {}
+}

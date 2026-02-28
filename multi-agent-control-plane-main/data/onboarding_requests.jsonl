@@ -1,0 +1,3 @@
+{"app_id": "billing-service", "description": "Handles invoice processing and payment workflows", "event": "new_app_onboarded"}
+{"app_id": "search-api", "description": "Processes search queries and returns results", "event": "new_app_onboarded"}
+{"app_id": "payment-gateway", "description": "Processes payment transactions", "event": "new_app_onboarded"}

@@ -1,0 +1,198 @@
+version: '3.8'
+
+services:
+  # Main Dashboard
+  dashboard:
+    build: .
+    container_name: cicd-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - DASHBOARD_AUTO_REFRESH=true
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
+    volumes:
+      - ./logs:/app/logs
+      - ./dataset:/app/dataset
+      - ./insightflow:/app/insightflow
+    command: streamlit run dashboard/dashboard.py --server.port=8501 --server.address=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8501/_stcore/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - cicd-network
+
+  # Observability Dashboard
+  observability:
+    build: .
+    container_name: cicd-observability
+    ports:
+      - "8502:8502"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
+    volumes:
+      - ./logs:/app/logs
+    command: streamlit run dashboard/observability_dashboard.py --server.port=8502 --server.address=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8502/_stcore/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+    networks:
+      - cicd-network
+
+  # Main Agents
+  agents:
+    build: .
+    container_name: cicd-agents
+    environment:
+      - DATASET_PATH=dataset/student_scores.csv
+      - PLANNER_TYPE=rl
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
+    volumes:
+      - ./logs:/app/logs
+      - ./dataset:/app/dataset
+      - ./insightflow:/app/insightflow
+      - ./apps:/app/apps
+      - ./orchestrator:/app/orchestrator
+    command: python main.py --dataset dataset/student_scores.csv --planner rl
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import os; exit(0 if os.path.exists('logs/deployment_log.csv') else 1)" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - cicd-network
+
+  # Deploy Workers
+  deploy-worker-1:
+    build: .
+    container_name: cicd-deploy-worker-1
+    environment:
+      - WORKER_ID=1
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    volumes:
+      - ./logs:/app/logs
+      - ./dataset:/app/dataset
+    command: python agents/multi_deploy_agent.py --env dev --workers 1
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - cicd-network
+
+  deploy-worker-2:
+    build: .
+    container_name: cicd-deploy-worker-2
+    environment:
+      - WORKER_ID=2
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    volumes:
+      - ./logs:/app/logs
+      - ./dataset:/app/dataset
+    command: python agents/multi_deploy_agent.py --env dev --workers 1
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - cicd-network
+
+  deploy-worker-3:
+    build: .
+    container_name: cicd-deploy-worker-3
+    environment:
+      - WORKER_ID=3
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    volumes:
+      - ./logs:/app/logs
+      - ./dataset:/app/dataset
+    command: python agents/multi_deploy_agent.py --env dev --workers 1
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - cicd-network
+
+  # Redis Event Bus
+  redis:
+    image: redis:7-alpine
+    container_name: cicd-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - cicd-network
+
+  # Queue Monitor
+  queue-monitor:
+    build: .
+    container_name: cicd-queue-monitor
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./logs:/app/logs
+    command: python monitoring/queue_monitor.py --continuous
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - cicd-network
+
+  # System Health Monitor
+  health-monitor:
+    build: .
+    container_name: cicd-health-monitor
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./logs:/app/logs
+    command: python monitoring/infra_health_monitor.py --env dev
+    restart: unless-stopped
+    depends_on:
+      - agents
+    networks:
+      - cicd-network
+
+networks:
+  cicd-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local

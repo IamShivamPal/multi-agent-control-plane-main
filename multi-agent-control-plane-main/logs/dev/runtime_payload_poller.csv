@@ -1,0 +1,9 @@
+timestamp,app,env,state,latency_ms,errors_last_min,workers
+2026-02-20T04:57:47.244459Z,local-api,dev,crashed,2043.67,1,1
+2026-02-20T04:57:51.313238Z,local-api,dev,crashed,2067.19,1,1
+2026-02-20T05:01:06.987085Z,github-com-pallets-flask-65450245,dev,running,888.65,0,1
+2026-02-20T05:03:27.357478Z,github-com-pallets-flask-65450245-3805,dev,running,800.16,0,1
+2026-02-20T05:09:20.106918Z,github-com-pallets-flask-65450245-4157,dev,running,1497.68,0,1
+2026-02-20T05:11:00.612682Z,github-com-pallets-flask-65450245-4257,dev,running,1643.01,0,1
+2026-02-20T05:13:36.508168Z,github-com-pallets-flask-65450245-4413,dev,running,1799.03,0,1
+2026-02-20T05:27:01.286606Z,github-com-pallets-flask-65450245-5217,dev,degraded,2433.16,1,1

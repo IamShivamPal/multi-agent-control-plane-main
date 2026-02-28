@@ -1,0 +1,751 @@
+{
+  "agent_id": "agent-3d496718",
+  "timestamp": "2026-02-20T07:26:33.276392",
+  "memory_stats": {
+    "agent_id": "agent-3d496718",
+    "created_at": "2026-02-20T07:25:38.186670",
+    "decision_count": 10,
+    "decision_capacity": 50,
+    "decision_utilization": "20.0%",
+    "app_count": 10,
+    "total_app_states": 10,
+    "max_states_per_app": 10,
+    "total_decisions_seen": 10,
+    "total_states_seen": 10,
+    "decisions_evicted": 0
+  },
+  "recent_decisions": [
+    {
+      "timestamp": "2026-02-20T07:26:24.622051",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 1,
+        "action_name": "restart",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:crash",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:24.619937",
+        "input_data": {
+          "event_id": "load-agentic-crash-0",
+          "event_type": "crash",
+          "timestamp": 1771572384.6168697,
+          "environment": "dev",
+          "app_id": "agentic",
+          "data": {
+            "state": "crashed",
+            "metrics": {
+              "latency_ms": 1800.0,
+              "errors_last_min": 8,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "agentic",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-agentic-crash-0",
+        "event_type": "crash",
+        "timestamp": 1771572384.6168697,
+        "environment": "dev",
+        "app_id": "agentic",
+        "data": {
+          "state": "crashed",
+          "metrics": {
+            "latency_ms": 1800.0,
+            "errors_last_min": 8,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:25.898216",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 2,
+        "action_name": "scale_up",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:overload",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:25.896684",
+        "input_data": {
+          "event_id": "load-app1-overload-1",
+          "event_type": "overload",
+          "timestamp": 1771572385.8947897,
+          "environment": "dev",
+          "app_id": "app1",
+          "data": {
+            "state": "running",
+            "metrics": {
+              "latency_ms": 2400.0,
+              "errors_last_min": 5,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "app1",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-app1-overload-1",
+        "event_type": "overload",
+        "timestamp": 1771572385.8947897,
+        "environment": "dev",
+        "app_id": "app1",
+        "data": {
+          "state": "running",
+          "metrics": {
+            "latency_ms": 2400.0,
+            "errors_last_min": 5,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:26.490872",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 0,
+        "action_name": "noop",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:false_alarm",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:26.489372",
+        "input_data": {
+          "event_id": "load-app2-false_alarm-2",
+          "event_type": "false_alarm",
+          "timestamp": 1771572386.4849257,
+          "environment": "dev",
+          "app_id": "app2",
+          "data": {
+            "state": "running",
+            "metrics": {
+              "latency_ms": 90.0,
+              "errors_last_min": 0,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "app2",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-app2-false_alarm-2",
+        "event_type": "false_alarm",
+        "timestamp": 1771572386.4849257,
+        "environment": "dev",
+        "app_id": "app2",
+        "data": {
+          "state": "running",
+          "metrics": {
+            "latency_ms": 90.0,
+            "errors_last_min": 0,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:27.646357",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 1,
+        "action_name": "restart",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:crash",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:27.645283",
+        "input_data": {
+          "event_id": "load-app22-crash-3",
+          "event_type": "crash",
+          "timestamp": 1771572387.6432314,
+          "environment": "dev",
+          "app_id": "app22",
+          "data": {
+            "state": "crashed",
+            "metrics": {
+              "latency_ms": 1800.0,
+              "errors_last_min": 8,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "app22",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-app22-crash-3",
+        "event_type": "crash",
+        "timestamp": 1771572387.6432314,
+        "environment": "dev",
+        "app_id": "app22",
+        "data": {
+          "state": "crashed",
+          "metrics": {
+            "latency_ms": 1800.0,
+            "errors_last_min": 8,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:28.254651",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 2,
+        "action_name": "scale_up",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:overload",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:28.252510",
+        "input_data": {
+          "event_id": "load-app33-overload-4",
+          "event_type": "overload",
+          "timestamp": 1771572388.2489362,
+          "environment": "dev",
+          "app_id": "app33",
+          "data": {
+            "state": "running",
+            "metrics": {
+              "latency_ms": 2400.0,
+              "errors_last_min": 5,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "app33",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-app33-overload-4",
+        "event_type": "overload",
+        "timestamp": 1771572388.2489362,
+        "environment": "dev",
+        "app_id": "app33",
+        "data": {
+          "state": "running",
+          "metrics": {
+            "latency_ms": 2400.0,
+            "errors_last_min": 5,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:28.932603",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 0,
+        "action_name": "noop",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:false_alarm",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:28.931091",
+        "input_data": {
+          "event_id": "load-app44-false_alarm-5",
+          "event_type": "false_alarm",
+          "timestamp": 1771572388.9263942,
+          "environment": "dev",
+          "app_id": "app44",
+          "data": {
+            "state": "running",
+            "metrics": {
+              "latency_ms": 90.0,
+              "errors_last_min": 0,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "app44",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-app44-false_alarm-5",
+        "event_type": "false_alarm",
+        "timestamp": 1771572388.9263942,
+        "environment": "dev",
+        "app_id": "app44",
+        "data": {
+          "state": "running",
+          "metrics": {
+            "latency_ms": 90.0,
+            "errors_last_min": 0,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:30.206578",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 1,
+        "action_name": "restart",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:crash",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:30.205167",
+        "input_data": {
+          "event_id": "load-blackhole-crash-6",
+          "event_type": "crash",
+          "timestamp": 1771572390.2029183,
+          "environment": "dev",
+          "app_id": "blackhole",
+          "data": {
+            "state": "crashed",
+            "metrics": {
+              "latency_ms": 1800.0,
+              "errors_last_min": 8,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "blackhole",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-blackhole-crash-6",
+        "event_type": "crash",
+        "timestamp": 1771572390.2029183,
+        "environment": "dev",
+        "app_id": "blackhole",
+        "data": {
+          "state": "crashed",
+          "metrics": {
+            "latency_ms": 1800.0,
+            "errors_last_min": 8,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:30.731776",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 2,
+        "action_name": "scale_up",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:overload",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:30.730395",
+        "input_data": {
+          "event_id": "load-crash-prone-app-overload-7",
+          "event_type": "overload",
+          "timestamp": 1771572390.7283366,
+          "environment": "dev",
+          "app_id": "crash-prone-app",
+          "data": {
+            "state": "running",
+            "metrics": {
+              "latency_ms": 2400.0,
+              "errors_last_min": 5,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "crash-prone-app",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-crash-prone-app-overload-7",
+        "event_type": "overload",
+        "timestamp": 1771572390.7283366,
+        "environment": "dev",
+        "app_id": "crash-prone-app",
+        "data": {
+          "state": "running",
+          "metrics": {
+            "latency_ms": 2400.0,
+            "errors_last_min": 5,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:31.291194",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 0,
+        "action_name": "noop",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:false_alarm",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:31.290015",
+        "input_data": {
+          "event_id": "load-css-false_alarm-8",
+          "event_type": "false_alarm",
+          "timestamp": 1771572391.2879977,
+          "environment": "dev",
+          "app_id": "css",
+          "data": {
+            "state": "running",
+            "metrics": {
+              "latency_ms": 90.0,
+              "errors_last_min": 0,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "css",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-css-false_alarm-8",
+        "event_type": "false_alarm",
+        "timestamp": 1771572391.2879977,
+        "environment": "dev",
+        "app_id": "css",
+        "data": {
+          "state": "running",
+          "metrics": {
+            "latency_ms": 90.0,
+            "errors_last_min": 0,
+            "workers": 2
+          }
+        }
+      }
+    },
+    {
+      "timestamp": "2026-02-20T07:26:31.920428",
+      "decision_type": "event_policy_decision",
+      "decision_data": {
+        "rl_action": 1,
+        "action_name": "restart",
+        "source": "runtime_event_policy",
+        "reason": "event_policy:crash",
+        "confidence": 1.0,
+        "execution_result": {},
+        "timestamp": "2026-02-20T07:26:31.918399",
+        "input_data": {
+          "event_id": "load-demo-api-crash-9",
+          "event_type": "crash",
+          "timestamp": 1771572391.9147882,
+          "environment": "dev",
+          "app_id": "demo-api",
+          "data": {
+            "state": "crashed",
+            "metrics": {
+              "latency_ms": 1800.0,
+              "errors_last_min": 8,
+              "workers": 2
+            }
+          }
+        },
+        "override_applied": false,
+        "memory_signals_used": {
+          "recent_failures": 0,
+          "recent_successes": 0,
+          "recent_actions": [],
+          "repeated_actions": 0,
+          "instability_score": 0,
+          "last_action_outcome": null,
+          "total_recent_decisions": 0,
+          "entity_id": "demo-api",
+          "app_context": null
+        }
+      },
+      "outcome": "pending",
+      "context": {
+        "event_id": "load-demo-api-crash-9",
+        "event_type": "crash",
+        "timestamp": 1771572391.9147882,
+        "environment": "dev",
+        "app_id": "demo-api",
+        "data": {
+          "state": "crashed",
+          "metrics": {
+            "latency_ms": 1800.0,
+            "errors_last_min": 8,
+            "workers": 2
+          }
+        }
+      }
+    }
+  ],
+  "app_states": {
+    "agentic": [
+      {
+        "timestamp": "2026-02-20T07:26:25.893275",
+        "app_id": "agentic",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:25.893264"
+        }
+      }
+    ],
+    "app1": [
+      {
+        "timestamp": "2026-02-20T07:26:26.482835",
+        "app_id": "app1",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:26.482819"
+        }
+      }
+    ],
+    "app2": [
+      {
+        "timestamp": "2026-02-20T07:26:27.641390",
+        "app_id": "app2",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:27.641381"
+        }
+      }
+    ],
+    "app22": [
+      {
+        "timestamp": "2026-02-20T07:26:28.245800",
+        "app_id": "app22",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:28.245787"
+        }
+      }
+    ],
+    "app33": [
+      {
+        "timestamp": "2026-02-20T07:26:28.923162",
+        "app_id": "app33",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:28.923078"
+        }
+      }
+    ],
+    "app44": [
+      {
+        "timestamp": "2026-02-20T07:26:30.201485",
+        "app_id": "app44",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:30.201476"
+        }
+      }
+    ],
+    "blackhole": [
+      {
+        "timestamp": "2026-02-20T07:26:30.726471",
+        "app_id": "blackhole",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:30.726462"
+        }
+      }
+    ],
+    "crash-prone-app": [
+      {
+        "timestamp": "2026-02-20T07:26:31.284546",
+        "app_id": "crash-prone-app",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:31.284534"
+        }
+      }
+    ],
+    "css": [
+      {
+        "timestamp": "2026-02-20T07:26:31.910462",
+        "app_id": "css",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:31.910452"
+        }
+      }
+    ],
+    "demo-api": [
+      {
+        "timestamp": "2026-02-20T07:26:33.271272",
+        "app_id": "demo-api",
+        "status": "active",
+        "health": {
+          "last_action": "executed"
+        },
+        "recent_events": [
+          "action_executed",
+          "loop_0"
+        ],
+        "metrics": {
+          "timestamp": "2026-02-20T07:26:33.271263"
+        }
+      }
+    ]
+  }
+}
