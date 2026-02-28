@@ -67,3 +67,5 @@ dump.rdb
 test_export.json
 automation_data.json
 unified_events.json
+
+node_modules/
