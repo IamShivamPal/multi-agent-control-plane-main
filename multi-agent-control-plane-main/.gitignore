@@ -69,3 +69,5 @@ automation_data.json
 unified_events.json
 
 node_modules/
+frontend/.next/
+frontend/out/
