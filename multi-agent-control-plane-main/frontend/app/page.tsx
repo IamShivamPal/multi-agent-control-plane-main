@@ -9,6 +9,7 @@ import { HealthBadge } from "@/components/HealthBadge";
 import { MetricCard } from "@/components/MetricCard";
 import { SectionCard } from "@/components/SectionCard";
 import { StatusCard } from "@/components/StatusCard";
+import { getAutonomousStatus } from "@/lib/api";
 import {
   getControlPlaneApps,
   getControlPlaneStatus,
@@ -22,6 +23,15 @@ import {
   removeLink,
 } from "@/lib/api";
 
+
+
+
+
+
+
+
+
+
 export default function HomePage() {
   const [data, setData] = useState<LivePayload | null>(null);
   const [orchestration, setOrchestration] = useState<OrchestrationMetrics | null>(null);
@@ -31,6 +41,7 @@ export default function HomePage() {
   const [ingestionLink, setIngestionLink] = useState("");
   const [ingestionError, setIngestionError] = useState<string | null>(null);
   const [isSubmittingLink, setIsSubmittingLink] = useState(false);
+  const [autonomousStatus, setAutonomousStatus] = useState<any>(null);
 
   const telemetry = data?.enhanced_telemetry ?? {
     status: error ? "UNAVAILABLE" : "LOADING",
@@ -103,11 +114,12 @@ export default function HomePage() {
 
     async function loadDashboard() {
       try {
-        const [dashboardPayload, orchestrationPayload, statusPayload, appsPayload] = await Promise.all([
+        const [dashboardPayload, orchestrationPayload, statusPayload, appsPayload, autonomousPayload] = await Promise.all([
           getLiveDashboard(),
           getOrchestrationMetrics(),
           getControlPlaneStatus(),
           getControlPlaneApps(),
+          getAutonomousStatus(),
         ]);
         if (!active) {
           return;
@@ -118,6 +130,8 @@ export default function HomePage() {
           setControlPlaneStatus(statusPayload);
           setControlPlaneApps(appsPayload);
           setError(null);
+          setAutonomousStatus(autonomousPayload);
+
         }
       } catch {
         if (active) {
@@ -331,6 +345,20 @@ export default function HomePage() {
         <SectionCard title="Live Events">
           <EventTimeline events={data?.live_events ?? []} />
         </SectionCard>
+
+        <SectionCard title="🧠 Autonomous Control Loop">
+          {autonomousStatus ? (
+            <div className="space-y-4">
+              <MetricCard label="Loop Running" value={autonomousStatus.loop_running ? "YES" : "NO"} tone="green" />
+              <MetricCard label="Last Action" value={autonomousStatus.last_action ?? "-"} />
+              <MetricCard label="Last State" value={autonomousStatus.last_runtime?.state ?? "-"} />
+              <MetricCard label="Latency (ms)" value={String(autonomousStatus.last_runtime?.latency_ms ?? "-")} />
+            </div>
+          ) : (
+            <p className="text-sm text-slate-500">Loading autonomous status...</p>
+          )}
+        </SectionCard>
+
 
         <footer className="flex justify-center pb-2">
           <Link

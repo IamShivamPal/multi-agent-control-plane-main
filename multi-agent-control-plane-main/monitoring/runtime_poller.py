@@ -73,7 +73,7 @@ class RuntimePoller:
 
     def poll_once(self, service_name: str, target_url: str) -> Dict[str, Any]:
         """Poll one endpoint and return normalized runtime signal."""
-        timestamp = datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z")
+        timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
         start = time.perf_counter()
 
         http_status: Optional[int] = None
@@ -228,7 +228,7 @@ class RuntimePoller:
         with open(self.runtime_payload_log_file, "a", newline="", encoding="utf-8") as file_handle:
             writer = csv.writer(file_handle)
             writer.writerow([
-                datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
+                datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
                 runtime_payload["app"],
                 runtime_payload["env"],
                 runtime_payload["state"],

@@ -38,9 +38,12 @@ Set API base in `.env.local`:
 ```bash
 NEXT_PUBLIC_BACKEND_PORT=7999
 NEXT_PUBLIC_DECISION_BRAIN_API_URL=http://localhost:7999
+NEXT_PUBLIC_API_URL=http://localhost:7999
+NEXT_PUBLIC_CONTROL_PLANE_URL=http://localhost:7000
 ```
 
 `NEXT_PUBLIC_DECISION_BRAIN_API_URL` takes priority. If omitted, frontend uses `http://localhost:${NEXT_PUBLIC_BACKEND_PORT}`.
+`NEXT_PUBLIC_API_URL` is kept for compatibility with cached/older frontend bundles.
 
 The frontend consumes live backend endpoints via `lib/api.ts`, including:
 
@@ -61,3 +64,13 @@ The frontend consumes live backend endpoints via `lib/api.ts`, including:
 
 - Home dashboard and Decision Brain page poll backend data for near real-time updates.
 - If API is unreachable, UI shows fallback/error state while retaining the current view.
+
+### Troubleshooting
+
+- If logs show `GET /undefined/autonomous-status 404`, ensure `.env.local` includes `NEXT_PUBLIC_API_URL` and restart Next.js.
+- If behavior persists after env updates, clear build cache and restart:
+
+```powershell
+Remove-Item -Recurse -Force .next
+npm run dev
+```

@@ -14,3 +14,6 @@ timestamp,service_name,target_url,http_status,healthy,latency_ms,error_detected,
 2026-02-20T05:13:34.706503Z,github-com-pallets-flask-65450245-4413,https://github.com/pallets/flask/,200,True,1799.03,False,none,,dev
 2026-02-20T05:26:57.192806Z,github-com-pallets-flask-65450245-5217,https://github.com/pallets/flask/api/health,404,False,1653.37,True,http_error,HTTP 404,dev
 2026-02-20T05:26:58.849481Z,github-com-pallets-flask-65450245-5217,https://github.com/pallets/flask/,200,False,2433.16,True,high_latency,latency_ms=2433.16,dev
+2026-03-02T06:14:54.761992Z,local-backend,http://127.0.0.1:7999/api/health,,False,5008.44,True,timeout,Request timed out after 5.0s,dev
+2026-03-02T06:15:45.125811Z,local-backend,http://127.0.0.1:7999/api/health,404,False,14.72,True,http_error,HTTP 404,dev
+2026-03-02T06:18:09.099639Z,local-backend,http://127.0.0.1:8000/api/health,404,False,4.7,True,http_error,HTTP 404,dev

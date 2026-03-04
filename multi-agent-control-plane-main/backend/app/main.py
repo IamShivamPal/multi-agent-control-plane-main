@@ -10,8 +10,12 @@ from pathlib import Path
 from typing import Any
 import sys
 
+from collections import deque
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .execution_simulator import execute_action
 
 try:
     from .config import ACTION_SCOPE, DEMO_FROZEN, STATELESS, SUCCESS_RATE
@@ -62,6 +66,17 @@ app.add_middleware(
 
 # In-memory recent activity only (reset on process restart).
 _RECENT_DECISIONS: deque[DecisionResponse] = deque(maxlen=10)
+
+
+_AUTONOMOUS_DECISIONS: deque[dict] = deque(maxlen=20)
+_LAST_AUTONOMOUS_RUNTIME: dict | None = None
+_LAST_EXECUTED_ACTION: str | None = None
+
+
+
+
+
+
 
 # In-memory ingested links for monitoring with rich metadata
 _INGESTED_LINKS: list[dict[str, Any]] = []
@@ -676,6 +691,24 @@ def orchestration_metrics() -> dict[str, Any]:
     }
 
 
+
+
+
+
+
+
+@app.get("/api/health")
+def api_health():
+    return {"status": "ok"}
+
+
+
+
+
+
+
+
+
 @app.post("/decision-with-control-plane")
 def decision_with_control_plane(payload: DecisionRequest) -> dict[str, Any]:
     """Make a decision and sync with control plane."""
@@ -700,8 +733,70 @@ def decision_with_control_plane(payload: DecisionRequest) -> dict[str, Any]:
     }
 
 
+
+
+
+
+
+
+import threading
+import time
+from .runtime_adapter import runtime_decision_cycle
+
+
+from .execution_simulator import execute_action
+
+def autonomous_loop():
+    global _LAST_AUTONOMOUS_RUNTIME, _LAST_EXECUTED_ACTION
+
+    while True:
+        try:
+            result = runtime_decision_cycle(
+                service_name="local-backend",
+                base_url="http://127.0.0.1:8000"
+            )
+
+            runtime_payload = result["runtime_payload"]
+            decision = result["decision"]
+
+            print("[AUTONOMOUS LOOP]", result)
+
+            execute_action(decision)
+
+            # Store autonomous activity separately
+            _LAST_AUTONOMOUS_RUNTIME = runtime_payload
+            _LAST_EXECUTED_ACTION = decision.selected_action
+            _AUTONOMOUS_DECISIONS.appendleft({
+                "runtime": runtime_payload,
+                "decision": decision.dict(),
+            })
+
+        except Exception as e:
+            print("[AUTONOMOUS LOOP ERROR]", str(e))
+
+        time.sleep(10)
+
+
+@app.on_event("startup")
+def start_autonomous_loop():
+    thread = threading.Thread(target=autonomous_loop, daemon=True)
+    thread.start()
+
+
+@app.get("/autonomous-status")
+def autonomous_status():
+    return {
+        "last_runtime": _LAST_AUTONOMOUS_RUNTIME,
+        "last_action": _LAST_EXECUTED_ACTION,
+        "recent_autonomous_decisions": list(_AUTONOMOUS_DECISIONS),
+        "loop_running": True,
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
 
     port = int(os.getenv("BACKEND_PORT", os.getenv("PORT", "7999")))
     uvicorn.run(app, host="0.0.0.0", port=port, reload=False)
+
+

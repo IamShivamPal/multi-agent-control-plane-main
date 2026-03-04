@@ -238,6 +238,7 @@ REDIS_URL=redis://localhost:6379
 # Frontend (Next.js)
 NEXT_PUBLIC_BACKEND_PORT=7999
 NEXT_PUBLIC_DECISION_BRAIN_API_URL=http://localhost:7999
+NEXT_PUBLIC_API_URL=http://localhost:7999
 NEXT_PUBLIC_CONTROL_PLANE_URL=http://localhost:7000
 ```
 
