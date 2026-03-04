@@ -9,7 +9,7 @@ import { HealthBadge } from "@/components/HealthBadge";
 import { MetricCard } from "@/components/MetricCard";
 import { SectionCard } from "@/components/SectionCard";
 import { StatusCard } from "@/components/StatusCard";
-import { getAutonomousStatus } from "@/lib/api";
+import { getAutonomousStatus } from "../services/api";
 import {
   getControlPlaneApps,
   getControlPlaneStatus,
@@ -21,7 +21,7 @@ import {
   type LivePayload,
   type OrchestrationMetrics,
   removeLink,
-} from "@/lib/api";
+} from "../services/api";
 
 
 

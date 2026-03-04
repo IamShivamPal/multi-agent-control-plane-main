@@ -16,7 +16,7 @@ import {
   type ActionScopeResponse,
   type DecisionResponse,
   type HealthResponse,
-} from "@/lib/api";
+} from "../../services/api";
 
 const environmentOptions = [
   { value: "DEV", label: "DEV" },
