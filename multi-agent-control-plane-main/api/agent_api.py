@@ -51,7 +51,12 @@ def start_agent_loop() -> None:
 threading.Thread(target=start_agent_loop, daemon=True).start()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": [
+    "https://multi-agent-control-plane-frontend.vercel.app",
+    "https://multi-agent-control-plane-frontend-dev.vercel.app",
+    "http://localhost:3200",
+    "http://localhost:3000"
+]}})
 
 # Initialize rate limiter
 limiter = Limiter(

@@ -58,7 +58,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://multi-agent-control-plane-frontend.vercel.app",
+        "https://multi-agent-control-plane-frontend-dev.vercel.app",
+        "http://localhost:3200",
+        "http://localhost:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
