@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from uuid import NAMESPACE_DNS, uuid5
+from uuid import uuid4
 
 try:
     from .config import ACTION_SCOPE, CPU_SCALE_DOWN_THRESHOLD, CPU_SCALE_UP_THRESHOLD, MEMORY_SCALE_UP_THRESHOLD
@@ -18,7 +18,7 @@ class DecisionEngine:
 
     @staticmethod
     def decide(request: DecisionRequest) -> DecisionResponse:
-        """Produce a deterministic decision from validated input metrics."""
+        """Produce a unique decision from validated input metrics."""
 
         selected_action = "noop"
         reason = "No threshold exceeded"
@@ -46,11 +46,7 @@ class DecisionEngine:
                 reason = "Action constrained by environment"
             confidence = 0.99
 
-        fingerprint = (
-            f"{request.environment.value}|{request.event_type.value}|"
-            f"{request.cpu}|{request.memory}|{selected_action}|{reason}"
-        )
-        decision_id = uuid5(NAMESPACE_DNS, fingerprint)
+        decision_id = uuid4()
 
         return DecisionResponse(
             decision_id=decision_id,
