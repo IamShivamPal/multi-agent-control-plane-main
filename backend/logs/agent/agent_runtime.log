@@ -1,0 +1,12 @@
+2026-02-21 14:56:47,707 - agent.agent-4cd71910.runtime - INFO - Initializing system components | Context: {"timestamp": "2026-02-21T09:26:47.707137", "agent_id": "agent-4cd71910", "agent_state": "idle"}
+2026-02-21 14:56:51,819 - agent.agent-4cd71910.runtime - INFO - Redis event bus initialized | Context: {"timestamp": "2026-02-21T09:26:51.819890", "agent_id": "agent-4cd71910", "agent_state": "idle"}
+2026-02-21 14:56:55,938 - agent.agent-4cd71910.runtime - INFO - Perception adapters initialized: 4 adapters | Context: {"timestamp": "2026-02-21T09:26:55.938262", "agent_id": "agent-4cd71910", "agent_state": "idle"}
+2026-02-21 14:56:55,938 - agent.agent-4cd71910.runtime - INFO - All components initialized | Context: {"timestamp": "2026-02-21T09:26:55.938621", "agent_id": "agent-4cd71910", "agent_state": "idle"}
+2026-02-21 14:56:55,938 - agent.agent-4cd71910.runtime - INFO - Agent initialized: id=agent-4cd71910, env=production, version=1.0.0 | Context: {"timestamp": "2026-02-21T09:26:55.938775", "agent_id": "agent-4cd71910", "agent_state": "idle"}
+2026-02-21 14:56:55,939 - agent.agent-4cd71910.runtime - INFO - Autonomous operation: agent_initialization
+2026-03-06 12:28:24,455 - agent.agent-18464b3a.runtime - INFO - Initializing system components | Context: {"timestamp": "2026-03-06T06:58:24.455555", "agent_id": "agent-18464b3a", "agent_state": "idle"}
+2026-03-06 12:28:28,543 - agent.agent-18464b3a.runtime - INFO - Redis event bus initialized | Context: {"timestamp": "2026-03-06T06:58:28.543965", "agent_id": "agent-18464b3a", "agent_state": "idle"}
+2026-03-06 12:28:32,660 - agent.agent-18464b3a.runtime - INFO - Perception adapters initialized: 4 adapters | Context: {"timestamp": "2026-03-06T06:58:32.660644", "agent_id": "agent-18464b3a", "agent_state": "idle"}
+2026-03-06 12:28:32,660 - agent.agent-18464b3a.runtime - INFO - All components initialized | Context: {"timestamp": "2026-03-06T06:58:32.660644", "agent_id": "agent-18464b3a", "agent_state": "idle"}
+2026-03-06 12:28:32,662 - agent.agent-18464b3a.runtime - INFO - Agent initialized: id=agent-18464b3a, env=production, version=1.0.0 | Context: {"timestamp": "2026-03-06T06:58:32.662150", "agent_id": "agent-18464b3a", "agent_state": "idle"}
+2026-03-06 12:28:32,664 - agent.agent-18464b3a.runtime - INFO - Autonomous operation: agent_initialization
