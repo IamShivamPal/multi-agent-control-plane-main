@@ -157,19 +157,9 @@ export type ControlPlaneApps = {
 const BACKEND_PORT = process.env.NEXT_PUBLIC_BACKEND_PORT ?? "7999";
 const API_BASE = process.env.NEXT_PUBLIC_DECISION_BRAIN_API_URL ?? `http://localhost:${BACKEND_PORT}`;
 
-
-
 export async function getAutonomousStatus() {
   return fetchJson<Record<string, unknown>>("/autonomous-status");
 }
-
-
-
-
-
-
-
-
 
 type DecisionRequestPayload = {
   environment: "DEV" | "STAGE" | "PROD";
