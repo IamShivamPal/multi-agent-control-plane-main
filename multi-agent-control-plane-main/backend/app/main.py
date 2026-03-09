@@ -16,6 +16,30 @@ from collections import deque
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .execution_simulator import execute_action
+from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(
+    title="Pravah Decision Brain API",
+    version="1.0.0",
+    description="Stateless RL Decision Brain integrated with Multi-Agent Control Plane"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://multi-agent-control-plane-frontend.vercel.app",
+        "https://multi-agent-control-plane-frontend-dev.vercel.app",
+        "http://localhost:4500",
+        "http://localhost:3200",
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 try:
     from .config import ACTION_SCOPE, DEMO_FROZEN, STATELESS, SUCCESS_RATE
