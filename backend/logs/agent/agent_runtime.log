@@ -10,3 +10,69 @@
 2026-03-06 12:28:32,660 - agent.agent-18464b3a.runtime - INFO - All components initialized | Context: {"timestamp": "2026-03-06T06:58:32.660644", "agent_id": "agent-18464b3a", "agent_state": "idle"}
 2026-03-06 12:28:32,662 - agent.agent-18464b3a.runtime - INFO - Agent initialized: id=agent-18464b3a, env=production, version=1.0.0 | Context: {"timestamp": "2026-03-06T06:58:32.662150", "agent_id": "agent-18464b3a", "agent_state": "idle"}
 2026-03-06 12:28:32,664 - agent.agent-18464b3a.runtime - INFO - Autonomous operation: agent_initialization
+2026-03-09 13:10:37,328 - agent.agent-259136c0.runtime - INFO - Initializing system components | Context: {"timestamp": "2026-03-09T07:40:37.328303", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 13:10:41,436 - agent.agent-259136c0.runtime - INFO - Redis event bus initialized | Context: {"timestamp": "2026-03-09T07:40:41.436045", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 13:10:45,521 - agent.agent-259136c0.runtime - INFO - Perception adapters initialized: 4 adapters | Context: {"timestamp": "2026-03-09T07:40:45.521278", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 13:10:45,521 - agent.agent-259136c0.runtime - INFO - All components initialized | Context: {"timestamp": "2026-03-09T07:40:45.521278", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 13:10:45,522 - agent.agent-259136c0.runtime - INFO - Agent initialized: id=agent-259136c0, env=production, version=1.0.0 | Context: {"timestamp": "2026-03-09T07:40:45.522780", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 13:10:45,522 - agent.agent-259136c0.runtime - INFO - Autonomous operation: agent_initialization
+2026-03-09 14:19:50,644 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:49:50.644713", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:00,067 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:00.066233", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:00,675 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:00.675143", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:00,863 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:00.863575", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:01,023 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:01.023173", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:01,187 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:01.187531", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:01,351 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:01.351726", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:01,487 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:01.486516", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,021 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.020734", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,054 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.054741", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,090 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.090016", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,128 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.128613", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,159 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.159608", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,191 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.191702", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,222 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.222758", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,256 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.256831", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,289 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.289237", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,319 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.319173", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,351 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.351626", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,385 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.385014", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,417 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.417077", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,451 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.451112", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,480 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.480976", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,513 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.513504", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,546 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.546259", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,580 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.580441", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,615 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.615175", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,647 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.647769", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,677 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.677852", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,713 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.713250", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,744 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.744152", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,780 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.780341", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,812 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.812194", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,844 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.844566", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,879 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.879640", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,913 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.913654", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,946 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.946064", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:02,979 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:02.979247", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,010 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.010834", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,047 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.047576", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,080 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.080946", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,118 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.118135", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,150 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.150621", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,183 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.183329", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,219 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.219066", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,257 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.257619", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,290 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.290897", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,315 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.315909", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,348 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.348363", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,382 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.381091", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,413 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.413220", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,448 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.447927", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:03,478 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:03.478205", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:09,124 - agent.agent-259136c0.runtime - INFO - Shutdown signal received: 2 | Context: {"timestamp": "2026-03-09T08:50:09.124374", "agent_id": "agent-259136c0", "agent_state": "idle"}
+2026-03-09 14:20:37,015 - agent.agent-acf20aed.runtime - INFO - Initializing system components | Context: {"timestamp": "2026-03-09T08:50:37.015411", "agent_id": "agent-acf20aed", "agent_state": "idle"}
+2026-03-09 14:20:41,137 - agent.agent-acf20aed.runtime - INFO - Redis event bus initialized | Context: {"timestamp": "2026-03-09T08:50:41.137813", "agent_id": "agent-acf20aed", "agent_state": "idle"}
+2026-03-09 14:20:45,249 - agent.agent-acf20aed.runtime - INFO - Perception adapters initialized: 4 adapters | Context: {"timestamp": "2026-03-09T08:50:45.249053", "agent_id": "agent-acf20aed", "agent_state": "idle"}
+2026-03-09 14:20:45,250 - agent.agent-acf20aed.runtime - INFO - All components initialized | Context: {"timestamp": "2026-03-09T08:50:45.249053", "agent_id": "agent-acf20aed", "agent_state": "idle"}
+2026-03-09 14:20:45,250 - agent.agent-acf20aed.runtime - INFO - Agent initialized: id=agent-acf20aed, env=production, version=1.0.0 | Context: {"timestamp": "2026-03-09T08:50:45.250056", "agent_id": "agent-acf20aed", "agent_state": "idle"}
+2026-03-09 14:20:45,251 - agent.agent-acf20aed.runtime - INFO - Autonomous operation: agent_initialization

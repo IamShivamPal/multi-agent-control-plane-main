@@ -1,6 +1,6 @@
-# RL Decision Brain Backend (FastAPI)
+# Pravah Decision Brain Backend (FastAPI)
 
-Stateless, deterministic Decision Brain API designed for a Next.js dashboard.
+Stateless, deterministic Decision Brain API designed for the Pravah Dashboard.
 
 ## Principles
 
@@ -87,11 +87,11 @@ Returns the latest 10 in-memory decisions.
 
 ### `GET /decision-summary`
 
-Returns aggregate summary values for the RL Decision Brain dashboard.
+Returns aggregate summary values for the Pravah Dashboard.
 
 ### `GET /live-dashboard`
 
-Returns the full payload for RL Reality Live Dashboard sections.
+Returns the full payload for Pravah Dashboard sections.
 
 ## Decision rules
 
@@ -110,27 +110,13 @@ Environment constraints are always enforced (`PROD` never auto-scales).
 pip install -r backend/requirements.txt
 ```
 
-2. Start server:
+2. Start server (runs on port 7999 by default):
 
 ```bash
 python backend/run.py
 ```
 
-Default backend port is `7999`.
+3. Verify connectivity:
 
-To run backend on a different, separate port:
-
-```bash
-BACKEND_PORT=7999 python backend/run.py
-```
-
-PowerShell:
-
-```powershell
-$env:BACKEND_PORT="7999"; python backend/run.py
-```
-
-3. Open OpenAPI docs:
-
+- `http://localhost:7999/live-dashboard`
 - `http://localhost:7999/docs`
-- `http://localhost:7999/redoc`
