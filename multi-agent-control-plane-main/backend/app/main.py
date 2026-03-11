@@ -48,14 +48,10 @@ app = FastAPI(
     description="Pravah RL Decision Brain integrated with Multi-Agent Control Plane",
 )
 
-# CORS middleware (ONLY THIS — nothing else needed)
+# CORS middleware: wildcard + no credentials (stateless API requirement)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:4500",
-        "http://localhost:3000",
-        "https://multi-agents-control-plane-bck.onrender.com"
-    ],
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
