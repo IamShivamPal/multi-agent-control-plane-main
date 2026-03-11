@@ -1,12 +1,10 @@
 services:
   - type: web
-    name: multi-agent-control-plane
+    name: pravah-decision-brain
     env: python
     buildCommand: pip install -r requirements-deploy.txt
-    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: ENVIRONMENT
-        value: stage
       - key: DEMO_MODE
         value: "true"
       - key: DEMO_FREEZE_MODE
@@ -15,4 +13,4 @@ services:
         value: "1"
       - key: PORT
         generateValue: true
-    healthCheckPath: /api/health
+    healthCheckPath: /health

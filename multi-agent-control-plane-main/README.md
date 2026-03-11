@@ -240,7 +240,23 @@ NEXT_PUBLIC_BACKEND_PORT=7999
 NEXT_PUBLIC_DECISION_BRAIN_API_URL=http://localhost:7999
 NEXT_PUBLIC_API_URL=http://localhost:7999
 NEXT_PUBLIC_CONTROL_PLANE_URL=http://localhost:7000
+
+# Backend CORS (for Vercel + Render deploy)
+BACKEND_CORS_ORIGINS=https://multi-agent-control-plane-frontend.vercel.app
+BACKEND_CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 ```
+
+### Vercel + Render Integration
+
+For production frontend-backend connectivity:
+
+1. Deploy backend on Render with service start command:
+  `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+2. In Vercel project env vars, set:
+  `NEXT_PUBLIC_DECISION_BRAIN_API_URL=https://multi-agents-control-plane-bck.onrender.com`
+3. In Render env vars, set:
+  `BACKEND_CORS_ORIGINS=https://multi-agent-control-plane-frontend.vercel.app`
+4. Keep `BACKEND_CORS_ORIGIN_REGEX=https://.*\.vercel\.app` to allow preview deployments.
 
 ### Governance Configuration
 

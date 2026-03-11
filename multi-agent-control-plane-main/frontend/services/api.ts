@@ -154,8 +154,12 @@ export type ControlPlaneApps = {
   integration_status: string;
 };
 
-const BACKEND_PORT = process.env.NEXT_PUBLIC_BACKEND_PORT ?? "8000";
-const API_BASE = process.env.NEXT_PUBLIC_DECISION_BRAIN_API_URL ?? `http://localhost:${BACKEND_PORT}`;
+const BACKEND_PORT = process.env.NEXT_PUBLIC_BACKEND_PORT ?? "7999";
+const RAW_API_BASE =
+  process.env.NEXT_PUBLIC_DECISION_BRAIN_API_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  `http://localhost:${BACKEND_PORT}`;
+const API_BASE = RAW_API_BASE.replace(/\/$/, "");
 
 export async function getAutonomousStatus() {
   return fetchJson<Record<string, unknown>>("/autonomous-status");

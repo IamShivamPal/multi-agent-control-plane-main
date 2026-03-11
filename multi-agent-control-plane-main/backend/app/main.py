@@ -1,8 +1,3 @@
-"""FastAPI entrypoint for a stateless RL-style Decision Brain backend.
-
-Integrated with Multi-Agent Control Plane for unified orchestration.
-"""
-
 from collections import deque
 from datetime import datetime, timezone
 import os
@@ -10,36 +5,10 @@ from pathlib import Path
 from typing import Any
 import sys
 
-from collections import deque
-
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from .execution_simulator import execute_action
-from fastapi.middleware.cors import CORSMiddleware
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI(
-    title="Pravah Decision Brain API",
-    version="1.0.0",
-    description="Stateless RL Decision Brain integrated with Multi-Agent Control Plane"
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://multi-agent-control-plane-frontend.vercel.app",
-        "https://multi-agent-control-plane-frontend-dev.vercel.app",
-        "http://localhost:4500",
-        "http://localhost:3200",
-        "http://localhost:3000",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 try:
     from .config import ACTION_SCOPE, DEMO_FROZEN, STATELESS, SUCCESS_RATE
@@ -53,7 +22,7 @@ try:
         LiveDashboardResponse,
         RecentActivityResponse,
     )
-    from integration_bridge import get_bridge
+    from .integration_bridge import get_bridge
 except ImportError:
     from .config import ACTION_SCOPE, DEMO_FROZEN, STATELESS, SUCCESS_RATE
     from .decision_engine import DecisionEngine
@@ -66,33 +35,32 @@ except ImportError:
         LiveDashboardResponse,
         RecentActivityResponse,
     )
-    from .integration_bridge import get_bridge
+    from integration_bridge import get_bridge
 
-# Initialize integration bridge for control plane sync
+
+# Initialize integration bridge
 _bridge = get_bridge()
 
+# Create FastAPI app
 app = FastAPI(
     title="Pravah Decision Brain API",
     version="1.0.0",
-    description=(
-        "Stateless, deterministic, demo-frozen Pravah Decision Brain API for dashboard integration. "
-        "Integrated with Multi-Agent Control Plane for unified orchestration."
-    ),
+    description="Pravah RL Decision Brain integrated with Multi-Agent Control Plane",
 )
 
+# CORS middleware (ONLY THIS — nothing else needed)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://multi-agent-control-plane-frontend.vercel.app",
-        "https://multi-agent-control-plane-frontend-dev.vercel.app",
         "http://localhost:4500",
-        "http://localhost:3200",
         "http://localhost:3000",
+        "https://multi-agents-control-plane-bck.onrender.com"
     ],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # In-memory recent activity only (reset on process restart).
 _RECENT_DECISIONS: deque[DecisionResponse] = deque(maxlen=10)
@@ -755,8 +723,8 @@ def decision_with_control_plane(payload: DecisionRequest) -> dict[str, Any]:
     # Record decision in integration bridge
     _bridge.record_rl_decision({
         "action": result.selected_action,
-        "cpu": payload.cpu_percent,
-        "memory": payload.memory_percent,
+        "cpu": payload.cpu,
+        "memory": payload.memory,
         "environment": payload.environment,
     })
     
