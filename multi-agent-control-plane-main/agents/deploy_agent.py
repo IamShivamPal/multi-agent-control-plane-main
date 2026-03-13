@@ -75,25 +75,54 @@ class DeployAgent:
             fail_count = 1 if status == "failure" else 0
             self.metrics.record_deploy_success_rate(1, success_count, fail_count, response_time)
     
-    def deploy_from_build(self, app_name: str) -> dict:
-        """Deploy application using build from registry."""
+    def deploy_from_build(self, app_name: str, build_path: str = None) -> dict:
+        """Deploy application using registry build OR local build workspace."""
+
+        # CASE 1 — Deploy from local build workspace
+        if build_path:
+            print(f"🚀 Deploying {app_name} from local build path: {build_path}")
+
+            import time
+            start = time.time()
+            time.sleep(0.5)
+
+            response_time = (time.time() - start) * 1000
+
+            self.log_deployment(
+                dataset=build_path,
+                status="success",
+                response_time=response_time,
+                action_type="deploy",
+                app_name=app_name,
+                build_id="local_build"
+            )
+
+            return {
+                "success": True,
+                "app_name": app_name,
+                "build_id": "local_build",
+                "image": build_path,
+                "response_time": response_time
+            }
+
+        # CASE 2 — Deploy from registry
         build = self.get_build_from_registry(app_name)
-        
+
         if not build:
             return {'success': False, 'error': f'No build found for {app_name} in {self.env}'}
-        
+
         print(f"🚀 Deploying {app_name} from build: {build['build_id']}")
         print(f"   Image: {build['image_name']}")
-        
-        # Simulate deployment
+
         import time
         start = time.time()
-        time.sleep(0.5)  # Simulate deployment time
+        time.sleep(0.5)
+
         response_time = (time.time() - start) * 1000
-        
+
         status = 'success'
         self.log_deployment(build['image_name'], status, response_time, 'deploy', app_name, build['build_id'])
-        
+
         return {
             'success': True,
             'app_name': app_name,
@@ -101,4 +130,3 @@ class DeployAgent:
             'image': build['image_name'],
             'response_time': response_time
         }
-

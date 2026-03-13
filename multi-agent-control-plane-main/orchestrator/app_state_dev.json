@@ -10,6 +10,13 @@
       "scale_method": "state_only",
       "stopped_at": 1764404334.7794373,
       "stop_method": "state_only"
+    },
+    "apps02": {
+      "status": "running",
+      "environment": "dev",
+      "build_id": "apps02_build",
+      "workers": 1,
+      "deployed_at": 1773305463.6772366
     }
   }
 }

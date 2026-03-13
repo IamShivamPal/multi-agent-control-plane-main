@@ -314,18 +314,35 @@ class OnboardingEntry:
         except Exception:
             pass  # Silent fail if proof logging unavailable
     
+
     def _trigger_deployment(self, app_name: str, spec_file: str):
         """Trigger deployment for onboarded app"""
+
         # Log deployment trigger
         self._log_proof(self.ProofEvents.DEPLOYMENT_TRIGGERED if self.use_proof_logging else None, {
             'app_name': app_name,
             'spec_file': spec_file,
             'trigger_source': 'onboarding_entry'
         })
-        
-        print(f"✓ Deployment triggered for '{app_name}'")
-        print(f"  Spec file: {spec_file}")
-        print(f"  Ready for pipeline integration")
+
+        try:
+            # Import orchestrator
+            from orchestrator.app_orchestrator import AppOrchestrator
+
+            orchestrator = AppOrchestrator()
+
+            print(f"🚀 Calling orchestrator.deploy_app({app_name})")
+
+            result = orchestrator.deploy_app(app_name)
+
+            if result.get("success"):
+                print(f"✅ Deployment successful: {app_name}")
+            else:
+                print(f"❌ Deployment failed: {result}")
+
+        except Exception as e:
+            print(f"❌ Deployment trigger error: {e}")
+
     
     def _log(self, status: str, input_data: Dict[str, Any], result: str):
         """Log acceptance/rejection"""

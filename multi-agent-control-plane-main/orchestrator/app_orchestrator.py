@@ -77,13 +77,49 @@ class AppOrchestrator:
         
         # Get build from registry
         build = self.deploy_agent.get_build_from_registry(app_name)
-        
+
+        # If no build exists, create one
         if not build:
-            return {'success': False, 'error': f'No build found for {app_name} in {env}'}
-        
+            print(f"🔧 No build found for {app_name}, creating build...")
+
+            spec_file = f"apps/registry/{app_name}.json"
+
+            if not os.path.exists(spec_file):
+                return {'success': False, 'error': f'App spec not found for {app_name}'}
+
+            with open(spec_file) as f:
+                spec = json.load(f)
+
+            repo_url = spec.get("repo_path_or_url")
+
+            build_result = self.build_engine.build(repo_url, app_name)
+
+            if not build_result["success"]:
+                return {'success': False, 'error': build_result["error"]}
+
+            print(f"✅ Build created for {app_name}")
+
+            # Try retrieving build again
+
+
+        build = {
+            "build_id": f"{app_name}_build",
+            "build_path": f"build_workspace/{app_name}"
+        }
+
+
+
         # Deploy using deploy agent
-        result = self.deploy_agent.deploy_from_build(app_name)
-        
+
+
+
+        result = self.deploy_agent.deploy_from_build(
+            app_name,
+            build_path=build["build_path"]
+        )
+
+
+
         if result['success']:
             # Update state
             self.state['apps'][app_name] = {
