@@ -4,22 +4,24 @@ Runtime Poller
 HTTP-based runtime polling with latency capture and basic error detection.
 """
 
-import csv
-import datetime
 import os
 import sys
+
+# Make backend root importable
+backend_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if backend_root not in sys.path:
+    sys.path.insert(0, backend_root)
+
+import csv
+import datetime
 import time
 from typing import Dict, Any, Optional
 from urllib.parse import urljoin
 
 import requests
 
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)
-
+from app.app_registry import load_apps
 from core.env_config import EnvironmentConfig
-
 
 class RuntimePoller:
     """Poll runtime health endpoints and emit deterministic status signals."""
@@ -291,3 +293,23 @@ if __name__ == "__main__":
             interval_seconds=args.interval_seconds,
             iterations=args.iterations,
         )
+
+
+
+
+
+def poll_all_services(env="dev"):
+    poller = RuntimePoller(env=env)
+
+    apps = load_apps()
+    results = []
+
+    for app in apps:
+        service = app["name"]
+        url = app["url"]
+
+        result = poller.poll_service(service, url)
+        results.append(result)
+
+    return results
+

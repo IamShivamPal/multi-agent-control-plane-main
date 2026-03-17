@@ -1,16 +1,16 @@
 {
   "sample-frontend": {
-    "cpu_percent": 11.8,
-    "memory_percent": 86.6,
+    "cpu_percent": 3.5,
+    "memory_percent": 66.5,
     "workers": 3,
     "status": "stopped",
-    "timestamp": 1773388701.387236
+    "timestamp": 1773472510.6188455
   },
   "apps02": {
-    "cpu_percent": 10.5,
-    "memory_percent": 86.5,
+    "cpu_percent": 3.0,
+    "memory_percent": 66.4,
     "workers": 1,
     "status": "running",
-    "timestamp": 1773388702.3956327
+    "timestamp": 1773472511.6306646
   }
 }

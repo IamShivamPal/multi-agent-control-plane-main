@@ -12,8 +12,7 @@ SERVICE_COMMANDS = {
     "sample-frontend": ["python", "backend/run.py"],
     "apps02": ["python", "backend/run.py"]
 }
-LOG_FILE = "execution_log.json"
-
+LOG_FILE = "logs/orchestrator/execution_log.json"
 
 def log_execution(action, success, state):
 
@@ -72,6 +71,25 @@ def restart_service(service_name):
             state=str(e)
         )
 
+def execute_action(action: str, service_name: str):
+    """
+    Map decision engine actions to executor operations.
+    """
+
+    if action == "restart":
+        restart_service(service_name)
+
+    elif action == "scale_up":
+        print(f"[EXECUTOR] Scale up requested for {service_name}")
+
+    elif action == "scale_down":
+        print(f"[EXECUTOR] Scale down requested for {service_name}")
+
+    elif action == "noop":
+        print(f"[EXECUTOR] No action required for {service_name}")
+
+    else:
+        print(f"[EXECUTOR] Unknown action: {action}")
 
 if __name__ == "__main__":
 
