@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-01-01T00:00:00Z",
+  "service_name": "example-service",
+  "cpu_percent": 20.5,
+  "memory_percent": 55.2,
+  "response_time_ms": 200,
+  "error_rate": 0.01
+}
