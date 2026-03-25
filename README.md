@@ -1,26 +1,136 @@
-# Pipeline Dashboard
+# RL Decision Brain Backend (FastAPI)
 
-Modern web-based dashboard for monitoring pipelines.
+Stateless, deterministic Decision Brain API designed for a Next.js dashboard.
 
-## Setup
+## Principles
+
+- Stateless service
+- Deterministic decision logic
+- No database
+- No infrastructure side effects
+- Environment-safe action constraints (`DEV`, `STAGE`, `PROD`)
+- Demo-frozen mode enabled
+
+## Stack
+
+- Python 3.11+
+- FastAPI
+- Pydantic v2
+- Uvicorn
+
+## Project structure
+
+```text
+backend/
+  app/
+    main.py
+    config.py
+    schemas.py
+    decision_engine.py
+    __init__.py
+  requirements.txt
+  run.py
+```
+
+## API contract
+
+### `GET /health`
+
+```json
+{
+  "status": "healthy",
+  "demo_frozen": true,
+  "stateless": true,
+  "success_rate": 1.0
+}
+```
+
+### `GET /action-scope`
+
+```json
+{
+  "DEV": ["noop", "scale_up", "scale_down", "restart"],
+  "STAGE": ["noop", "scale_up", "scale_down"],
+  "PROD": ["noop", "restart"]
+}
+```
+
+### `POST /decision`
+
+Request:
+
+```json
+{
+  "environment": "DEV",
+  "event_type": "HIGH_CPU",
+  "cpu": 85,
+  "memory": 50
+}
+```
+
+Response shape:
+
+```json
+{
+  "decision_id": "uuid",
+  "environment": "DEV",
+  "selected_action": "scale_up",
+  "reason": "CPU above threshold",
+  "confidence": 0.91,
+  "timestamp": "ISO-8601"
+}
+```
+
+### `GET /recent-activity`
+
+Returns the latest 10 in-memory decisions.
+
+### `GET /decision-summary`
+
+Returns aggregate summary values for the RL Decision Brain dashboard.
+
+### `GET /live-dashboard`
+
+Returns the full payload for RL Reality Live Dashboard sections.
+
+## Decision rules
+
+- If `cpu > 80` -> `scale_up` (if allowed)
+- If `cpu < 30` -> `scale_down` (if allowed)
+- If `memory > 85` -> `scale_up` (if allowed)
+- Otherwise -> `noop`
+
+Environment constraints are always enforced (`PROD` never auto-scales).
+
+## Run locally
 
 1. Install dependencies:
+
 ```bash
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
-2. Run the dashboard:
+2. Start server:
+
 ```bash
-python dashboard.py
+python backend/run.py
 ```
 
-3. Open browser and go to:
-```
-http://localhost:5000
+Default backend port is `7999`.
+
+To run backend on a different, separate port:
+
+```bash
+BACKEND_PORT=7999 python backend/run.py
 ```
 
-## Features
-- Real-time statistics
-- Interactive charts
-- Auto-refresh every 5 seconds
-- Modern dark theme UI
+PowerShell:
+
+```powershell
+$env:BACKEND_PORT="7999"; python backend/run.py
+```
+
+3. Open OpenAPI docs:
+
+- `http://localhost:7999/docs`
+- `http://localhost:7999/redoc`
