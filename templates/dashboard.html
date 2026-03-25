@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pravah - Decision Intelligence Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .container { max-width: 1600px; margin: 2rem auto; padding: 0 2rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: #1e293b; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .stat-card h3 { color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .stat-card .value { font-size: 2rem; font-weight: bold; color: #fff; }
+        .section { background: #1e293b; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 2rem; }
+        .section h2 { margin-bottom: 1.5rem; color: #e2e8f0; font-size: 1.5rem; }
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .app-card { background: #0f172a; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea; }
+        .app-card h3 { margin-bottom: 1rem; color: #e2e8f0; }
+        .metric { display: flex; justify-content: space-between; margin: 0.5rem 0; font-size: 0.9rem; }
+        .metric-label { color: #94a3b8; }
+        .metric-value { font-weight: bold; }
+        .decision-log { max-height: 400px; overflow-y: auto; }
+        .decision-item { background: #0f172a; padding: 1rem; margin-bottom: 0.5rem; border-radius: 6px; border-left: 3px solid #10b981; font-size: 0.85rem; }
+        .decision-item.enforced { border-left-color: #f59e0b; }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-right: 0.5rem; }
+        .badge-success { background: #10b981; color: #fff; }
+        .badge-warning { background: #f59e0b; color: #000; }
+        .badge-error { background: #ef4444; color: #fff; }
+        .badge-info { background: #3b82f6; color: #fff; }
+        .progress-bar { width: 100%; height: 6px; background: #334155; border-radius: 3px; overflow: hidden; margin-top: 0.5rem; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); }
+        .cpu-high { color: #ef4444; }
+        .cpu-medium { color: #f59e0b; }
+        .cpu-low { color: #10b981; }
+        .refresh-time { text-align: right; color: #94a3b8; font-size: 0.85rem; margin-top: 1rem; }
+        .error { color: #ef4444; padding: 1rem; background: #1e293b; border-radius: 8px; }
+    </style>
+  
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Pravah - Decision Intelligence Dashboard</h1>
+        <p>Autonomous Infrastructure Control System</p>
+    </div>
+
+    
+    <div class="card">
+  <h3>Runtime Timeline</h3>
+  <!-- <div id="timeline"></div> -->
+</div>
+
+
+
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Apps</h3>
+                <div class="value" id="total-apps">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Decisions</h3>
+                <div class="value" id="total-decisions">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Success Rate</h3>
+                <div class="value" id="success-rate">0%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Apps</h3>
+                <div class="value" id="active-apps">0</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Application Status</h2>
+            <div class="apps-grid" id="apps-container">
+                <p style="color: #94a3b8;">Loading applications...</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Recent Decisions</h2>
+                <div id="timeline"></div>
+
+            <div class="decision-log" id="decisions-container">
+                <p style="color: #94a3b8;">Loading decisions...</p>
+            </div>
+        </div>
+
+        <div class="refresh-time">
+            Last updated: <span id="last-update">--</span> | Auto-refresh every 5 seconds
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+function updateTimeline(data) {
+  const container = document.getElementById("timeline")
+  if (!container) return
+
+  container.innerHTML = ""
+
+  data.slice(-10).reverse().forEach(item => {
+    const div = document.createElement("div")
+
+    const success = item.execution?.success
+
+    div.innerHTML = `
+      <div style="
+        padding:10px;
+        margin-bottom:10px;
+        border-left:5px solid ${success ? '#22c55e' : '#ef4444'};
+        background:#111;
+      ">
+        <b>${item.event_type}</b> →
+        ${item.decision?.requested_action} →
+        ${item.execution?.executed_action}
+        
+        <span style="
+          float:right;
+          color:${success ? '#22c55e' : '#ef4444'};
+          font-weight:bold;
+        ">
+          ${success ? 'SUCCESS' : 'FAILED'}
+        </span>
+
+        <br/>
+        <small style="color:#aaa">${item.timestamp}</small>
+      </div>
+    `
+
+    container.appendChild(div)
+  })
+}
+
+
+
+
+
+        async function updateDashboard() {
+            try {
+                console.log('Fetching stats...');
+                const statsRes = await fetch('/api/stats');
+                const stats = await statsRes.json();
+                console.log('Stats:', stats);
+                
+                document.getElementById('total-apps').textContent = stats.total_apps || 0;
+                document.getElementById('total-decisions').textContent = stats.total_decisions || 0;
+                document.getElementById('success-rate').textContent = (stats.success_rate || 0) + '%';
+                document.getElementById('active-apps').textContent = stats.active_apps || 0;
+                
+                console.log('Fetching apps...');
+                const appsRes = await fetch('/api/apps');
+                const apps = await appsRes.json();
+                console.log('Apps:', apps);
+                
+                const appsContainer = document.getElementById('apps-container');
+                appsContainer.innerHTML = '';
+                
+                if (apps.length === 0) {
+                    appsContainer.innerHTML = '<p style="color: #94a3b8;">No applications found</p>';
+                } else {
+                    apps.forEach(app => {
+                        const cpuClass = app.cpu > 80 ? 'cpu-high' : app.cpu > 50 ? 'cpu-medium' : 'cpu-low';
+                        const decisionBadge = app.last_decision === 'scale_up' ? 'badge-warning' : 
+                                             app.last_decision === 'restart' ? 'badge-error' : 'badge-info';
+                        
+                        const appCard = document.createElement('div');
+                        appCard.className = 'app-card';
+                        appCard.innerHTML = `
+                            <h3>${app.app_id}</h3>
+                            <div class="metric">
+                                <span class="metric-label">CPU Usage:</span>
+                                <span class="metric-value ${cpuClass}">${app.cpu}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${app.cpu}%"></div>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Memory:</span>
+                                <span class="metric-value">${app.memory}%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Error Rate:</span>
+                                <span class="metric-value">${app.error_rate}%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Latency (P99):</span>
+                                <span class="metric-value">${app.latency}ms</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Replicas:</span>
+                                <span class="metric-value">${app.replicas}</span>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <span class="badge ${decisionBadge}">${app.last_decision.toUpperCase()}</span>
+                                <span class="badge badge-info">${app.total_decisions} decisions</span>
+                            </div>
+                        `;
+                        appsContainer.appendChild(appCard);
+                    });
+                }
+                
+                console.log('Fetching decisions...');
+                const decisionsRes = await fetch('/api/decisions');
+                const decisions = await decisionsRes.json();
+                console.log('Decisions:', decisions);
+                
+                const decisionsContainer = document.getElementById('decisions-container');
+                decisionsContainer.innerHTML = '';
+                
+                if (decisions.length === 0) {
+                    decisionsContainer.innerHTML = '<p style="color: #94a3b8;">No decisions yet</p>';
+                } else {
+                    decisions.slice(0, 15).forEach(decision => {
+                        const enforced = decision.enforced ? 'enforced' : '';
+                        const ackBadge = decision.acknowledged ? 'badge-success' : 'badge-error';
+                        
+                        const decisionItem = document.createElement('div');
+                        decisionItem.className = `decision-item ${enforced}`;
+                        decisionItem.innerHTML = `
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>${decision.app_id}</strong> - 
+                                <span class="badge badge-info">${decision.action.toUpperCase()}</span>
+                                <span class="badge ${ackBadge}">${decision.acknowledged ? 'ACK' : 'PENDING'}</span>
+                            </div>
+                            <div style="color: #94a3b8; font-size: 0.8rem;">
+                                ${decision.timestamp}
+                            </div>
+                        `;
+                        decisionsContainer.appendChild(decisionItem);
+                    });
+                }
+                
+                const now = new Date();
+                document.getElementById('last-update').textContent = now.toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Error updating dashboard:', error);
+                document.getElementById('apps-container').innerHTML = 
+                    `<div class="error">Error loading data: ${error.message}</div>`;
+            }
+        }
+
+        updateDashboard();
+        setInterval(updateDashboard, 5000);
+    </script>
+
+
+
+
+<script>
+async function fetchMetrics() {
+  try {
+    const res = await fetch("/api/runtime-metrics");
+    const data = await res.json();
+
+    console.log("FINAL DATA:", data);
+
+    updateTimeline(data);   // ✅ USE YOUR FUNCTION
+
+  } catch (err) {
+    console.error("Error fetching metrics:", err);
+  }
+}
+
+setInterval(fetchMetrics, 3000);
+fetchMetrics();
+</script> 
+
+
+
+
+
+</body>
+</html>
