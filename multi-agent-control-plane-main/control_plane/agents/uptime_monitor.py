@@ -1,7 +1,7 @@
 import os
 import csv
 import datetime
-from core.logger import AgentLogger
+from control_plane.core.logger import AgentLogger
 
 class UptimeMonitor:
     """Maintains a synthetic uptime/downtime timeline."""
@@ -40,7 +40,7 @@ class UptimeMonitor:
         """Logs a status change to the timeline if the status is different."""
         if new_status != self.last_status:
             # Guaranteed event emission - no silent failures
-            from core.guaranteed_events import emit_restart_event
+            from control_plane.core.guaranteed_events import emit_restart_event
             
             try:
                 if new_status == "UP":
@@ -63,7 +63,7 @@ class UptimeMonitor:
             
             # Use Redis stability manager for event publishing
             try:
-                from core.redis_stability import RedisStabilityManager
+                from control_plane.core.redis_stability import RedisStabilityManager
                 redis_bus = RedisStabilityManager.get_redis_connection('dev', allow_stub=True)
                 redis_bus.publish(f"system.{new_status.lower()}", {"reason": event_description})
             except Exception as e:

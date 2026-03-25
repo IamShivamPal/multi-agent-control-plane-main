@@ -2,8 +2,8 @@ import pandas as pd
 import os
 import csv
 import datetime
-from core.redis_event_bus import get_redis_bus
-from core.base_agent import BaseAgent
+from control_plane.core.redis_event_bus import get_redis_bus
+from control_plane.core.base_agent import BaseAgent
 from integration.event_schema import StandardEvent
 
 class IssueDetector(BaseAgent):

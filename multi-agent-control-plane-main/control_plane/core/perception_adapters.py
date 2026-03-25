@@ -6,8 +6,8 @@ Adapters for different perception sources (runtime events, health, onboarding).
 
 from datetime import datetime
 from typing import List, Dict, Any, Optional
-from core.perception import Perception, PerceptionType, PerceptionPriority
-
+# from core.perception import Perception, PerceptionType, PerceptionPriority
+from control_plane.core.perception import Perception
 
 class PerceptionAdapter:
     """Base class for perception adapters."""

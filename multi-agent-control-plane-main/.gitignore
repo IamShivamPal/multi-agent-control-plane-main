@@ -76,3 +76,10 @@ unified_events.json
 node_modules/
 frontend/.next/
 frontend/out/
+
+
+.venv/
+__pycache__/
+*.log
+logs/
+.env

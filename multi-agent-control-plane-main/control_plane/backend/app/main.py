@@ -8,7 +8,6 @@ import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .dashboard_api import get_dashboard_state
-from .execution_simulator import execute_action
 from .decision_engine import DecisionEngine
 from .schemas import DecisionRequest
 from app.runtime_adapter import runtime_cycle_all
@@ -639,13 +638,7 @@ def action_scope() -> ActionScopeResponse:
     return ActionScopeResponse(**ACTION_SCOPE)
 
 
-@app.post("/decision", response_model=DecisionResponse)
-def decision(payload: DecisionRequest) -> DecisionResponse:
-    """Compute a deterministic decision and append it to in-memory recent activity."""
 
-    result = DecisionEngine.decide(payload)
-    _RECENT_DECISIONS.appendleft(result)
-    return result
 
 
 @app.get("/recent-activity", response_model=RecentActivityResponse)
@@ -804,8 +797,6 @@ def orchestration_metrics() -> dict[str, Any]:
 
 
 
-
-
 @app.get("/api/health")
 def api_health():
     return {"status": "ok"}
@@ -814,86 +805,11 @@ def api_health():
 
 
 
-
-
-
-
-@app.post("/decision-with-control-plane")
-def decision_with_control_plane(payload: DecisionRequest) -> dict[str, Any]:
-    """Make a decision and sync with control plane."""
-    # Make RL decision
-    result = DecisionEngine.decide(payload)
-    _RECENT_DECISIONS.appendleft(result)
-    
-    # Record decision in integration bridge
-    _bridge.record_rl_decision({
-        "action": result.selected_action,
-        "cpu": payload.cpu,
-        "memory": payload.memory,
-        "environment": payload.environment,
-    })
-    
-    return {
-        "decision": result.dict(),
-        "control_plane_sync": {
-            "status": "synced" if _bridge.sync_enabled else "skipped",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-        },
-    }
-
-
-
-
-
-
-
-
 import threading
 import time
-from .runtime_adapter import runtime_decision_cycle
 
 
-from .execution_simulator import execute_action
 
-def autonomous_loop():
-    global _LAST_AUTONOMOUS_RUNTIME, _LAST_EXECUTED_ACTION
-
-    while True:
-        try:
-            result = runtime_decision_cycle(
-                service_name="local-backend",
-                base_url="http://127.0.0.1:8000"
-            )
-
-            runtime_payload = result["runtime_payload"]
-            decision_action = result["decision_action"]
-            decision_reason = result.get("decision_reason")
-            decision_confidence = result.get("confidence")
-
-            print("[AUTONOMOUS LOOP]", result)
-
-            # Store autonomous activity separately
-            _LAST_AUTONOMOUS_RUNTIME = runtime_payload
-            _LAST_EXECUTED_ACTION = decision_action
-            _AUTONOMOUS_DECISIONS.appendleft({
-                "runtime": runtime_payload,
-                "decision": {
-                    "selected_action": decision_action,
-                    "reason": decision_reason,
-                    "confidence": decision_confidence,
-                },
-            })
-
-        except Exception as e:
-            print("[AUTONOMOUS LOOP ERROR]", str(e))
-
-        time.sleep(10)
-
-
-@app.on_event("startup")
-def start_autonomous_loop():
-    thread = threading.Thread(target=autonomous_loop, daemon=True)
-    thread.start()
 
 
 @app.get("/autonomous-status")
@@ -921,29 +837,6 @@ def dashboard_state():
 
 
 
-
-
-
-
-
-
-
-from .runtime_adapter import runtime_decision_cycle
-
-
-@app.get("/test/runtime-cycle")
-def test_runtime_cycle():
-    result = runtime_decision_cycle(
-        service_name="apps02",
-        base_url="http://localhost:3000"
-    )
-    return result
-
-
-
-@app.get("/orchestration/runtime-cycle")
-def run_runtime_cycle():
-    return runtime_cycle_all()
 
 
 

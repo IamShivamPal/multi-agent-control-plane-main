@@ -11,7 +11,7 @@ import datetime
 import uuid
 from typing import Dict, List, Callable, Any
 import redis
-from core.env_config import EnvironmentConfig
+from control_plane.core.env_config import EnvironmentConfig
 from security.signing import sign_payload
 from security.nonce_store import check_nonce
 

@@ -1,7 +1,0 @@
-{
-  "timestamp": "2026-03-14T10:27:43.891841",
-  "cpu_usage_percent": 39.3,
-  "memory_usage_percent": 81.3,
-  "container_status": "running",
-  "health_endpoint_status": "unreachable"
-}

@@ -146,7 +146,7 @@ class SafeOrchestrator:
         Returns:
             Tuple of (allowed, reason) - (True, "") if allowed, (False, reason) if blocked
         """
-        from core.proof_logger import write_proof, ProofEvents
+        from control_plane.core.proof_logger import write_proof, ProofEvents
         
         if not self.demo_mode:
             return (True, "")  # Not in demo mode, allow through
@@ -183,8 +183,8 @@ class SafeOrchestrator:
         Returns:
             Tuple of (safe, reason) - (True, "") if safe, (False, reason) if refused
         """
-        from core.prod_safety import is_demo_mode_safe
-        from core.proof_logger import write_proof, ProofEvents
+        from control_plane.core.prod_safety import is_demo_mode_safe
+        from control_plane.core.proof_logger import write_proof, ProofEvents
         
         is_safe, refusal_reason = is_demo_mode_safe(action, source)
         
@@ -217,7 +217,7 @@ class SafeOrchestrator:
         Returns:
             Execution result with status and proof logging
         """
-        from core.proof_logger import write_proof, ProofEvents
+        from control_plane.core.proof_logger import write_proof, ProofEvents
         timestamp = datetime.datetime.now().isoformat()
 
         emergency_freeze_enabled = str(os.getenv('EMERGENCY_FREEZE_ENABLED', 'false')).lower() == 'true'
@@ -346,7 +346,7 @@ class SafeOrchestrator:
             return result
         
         # GATE 4: Action Governance Check (eligibility, cooldowns, repetition)
-        from core.action_governance import ActionGovernance
+        from control_plane.core.action_governance import ActionGovernance
         
         governance = ActionGovernance(env=self.env)
         governance_decision = governance.evaluate_action(
@@ -357,7 +357,7 @@ class SafeOrchestrator:
         
         if governance_decision.should_block:
             # Log specific governance event based on reason
-            from core.action_governance import GovernanceReason
+            from control_plane.core.action_governance import GovernanceReason
             
             event_map = {
                 GovernanceReason.COOLDOWN_ACTIVE.value: ProofEvents.COOLDOWN_ACTIVE,
@@ -465,7 +465,7 @@ class SafeOrchestrator:
                 timestamp=timestamp,
                 extra={'action_index': action_index}
             )
-            from core.proof_logger import write_proof, ProofEvents
+            from control_plane.core.proof_logger import write_proof, ProofEvents
             write_proof(ProofEvents.ORCH_REFUSE, {
                 'env': self.env,
                 'action': f'action_index:{action_index}',

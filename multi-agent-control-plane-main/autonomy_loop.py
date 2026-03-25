@@ -10,7 +10,7 @@ class AutonomyLoop:
         self.controller = DecisionController()
 
     def run(self):
-
+F
         print("🧠 Pravah Autonomy Loop Started")
 
         while True:

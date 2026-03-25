@@ -2,10 +2,10 @@ import os
 import csv
 import datetime
 import json
-from core.redis_event_bus import get_redis_bus
-from core.metrics_collector import get_metrics_collector
+from control_plane.core.redis_event_bus import get_redis_bus
+from control_plane.core.metrics_collector import get_metrics_collector
 from integration.event_schema import StandardEvent
-from core.env_config import EnvironmentConfig
+from control_plane.core.env_config import EnvironmentConfig
 
 class DeployAgent:
     """Tracks and logs main deployment events to a CSV file."""

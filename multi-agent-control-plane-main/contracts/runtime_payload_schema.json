@@ -1,8 +1,13 @@
 {
-  "timestamp": "2026-01-01T00:00:00Z",
-  "service_name": "example-service",
-  "cpu_percent": 20.5,
-  "memory_percent": 55.2,
-  "response_time_ms": 200,
-  "error_rate": 0.01
+  "type": "object",
+  "required": ["app_id", "cpu", "memory"],
+  "properties": {
+    "app_id": { "type": "string" },
+    "cpu": { "type": "number" },
+    "memory": { "type": "number" },
+    "error_rate": { "type": "number" },
+    "timestamp": { "type": "string" },
+    "event_type": { "type": "string" },
+    "source": { "type": "string" }
+  }
 }

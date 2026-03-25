@@ -10,12 +10,12 @@ import threading
 import queue
 import csv
 import datetime
-from agents.deploy_agent import DeployAgent
-from core.env_config import EnvironmentConfig
-from core.redis_event_bus import get_redis_bus
-from core.metrics_collector import get_metrics_collector
-from core.prod_safety import validate_prod_action, ProductionSafetyError
-from core.stage_determinism import StageDeterminismLock, log_determinism_status
+from control_plane.agents.deploy_agent import DeployAgent
+from control_plane.core.env_config import EnvironmentConfig
+from control_plane.core.redis_event_bus import get_redis_bus
+from control_plane.core.metrics_collector import get_metrics_collector
+from control_plane.core.prod_safety import validate_prod_action, ProductionSafetyError
+from control_plane.core.stage_determinism import StageDeterminismLock, log_determinism_status
 
 class MultiDeployAgent:
     """Manages multiple deploy agent workers for horizontal scaling."""
@@ -25,7 +25,7 @@ class MultiDeployAgent:
         self.workers = workers
         self.env_config = EnvironmentConfig(env)
         # Demo-safe Redis behavior - no silent mock mode
-        from core.redis_demo_behavior import get_redis_bus_demo_safe, RedisUnavailableError
+        from control_plane.core.redis_demo_behavior import get_redis_bus_demo_safe, RedisUnavailableError
         
         try:
             # Try Redis with explicit stub fallback for demo
@@ -131,7 +131,7 @@ class MultiDeployAgent:
                         status, response_time = 'success', 500 + (worker_id * 100)
                 
                 # Guaranteed event emission - no silent failures
-                from core.guaranteed_events import emit_deploy_event, emit_scale_event
+                from control_plane.core.guaranteed_events import emit_deploy_event, emit_scale_event
                 try:
                     if action_type == 'deploy':
                         emit_deploy_event(self.env, status, response_time, dataset)

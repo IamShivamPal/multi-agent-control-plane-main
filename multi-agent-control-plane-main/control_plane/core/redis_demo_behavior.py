@@ -3,7 +3,7 @@
 
 import logging
 from typing import Dict, Any, Optional
-from core.redis_stability import RedisStabilityManager, RedisConnectionError
+from control_plane.core.redis_stability import RedisStabilityManager, RedisConnectionError
 
 class RedisUnavailableError(Exception):
     """Raised when Redis is unavailable and no explicit stub is configured."""
@@ -34,5 +34,5 @@ def validate_redis_for_demo(env: str) -> Dict[str, Any]:
     Returns:
         Status dictionary with connection info
     """
-    from core.redis_stability import validate_redis_stability
+    from control_plane.core.redis_stability import validate_redis_stability
     return validate_redis_stability(env)

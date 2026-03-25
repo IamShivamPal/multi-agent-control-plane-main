@@ -7,9 +7,9 @@ Pipes normalized runtime JSON to Ritesh's RL layer unchanged and live
 import json
 import os
 from datetime import datetime
-from core.env_config import EnvironmentConfig
-from core.rl_remote_client import RLRemoteClient
-from core.state_adapter import StateAdapter
+from control_plane.core.env_config import EnvironmentConfig
+from control_plane.core.rl_remote_client import RLRemoteClient
+from control_plane.core.state_adapter import StateAdapter
 
 class RuntimeRLPipe:
     """Direct pipe from runtime events to the remote RL Decision Brain."""

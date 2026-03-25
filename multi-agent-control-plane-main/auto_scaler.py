@@ -2,9 +2,9 @@
 """Automated Scaling Policy Engine"""
 import time
 import threading
-from agents.multi_deploy_agent import MultiDeployAgent
-from core.env_config import EnvironmentConfig
-from core.metrics_collector import get_metrics_collector
+from control_plane.agents.multi_deploy_agent import MultiDeployAgent
+from control_plane.core.env_config import EnvironmentConfig
+from control_plane.core.metrics_collector import get_metrics_collector
 
 class AutoScaler:
     """Automated scaling based on queue depth and load metrics."""

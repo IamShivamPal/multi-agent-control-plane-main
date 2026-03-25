@@ -9,7 +9,7 @@ import csv
 import datetime
 import time
 from typing import Dict, Any, List
-from core.env_config import EnvironmentConfig
+from control_plane.core.env_config import EnvironmentConfig
 
 class MetricsCollector:
     """Centralized metrics collection system."""

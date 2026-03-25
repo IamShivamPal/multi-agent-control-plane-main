@@ -3,7 +3,7 @@ import csv
 import datetime
 import pandas as pd
 from abc import ABC, abstractmethod
-from core.logger import AgentLogger
+from control_plane.core.logger import AgentLogger
 
 class BaseAgent(ABC):
     """Base class for all agents with common functionality."""
