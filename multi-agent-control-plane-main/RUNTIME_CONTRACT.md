@@ -113,3 +113,4 @@ Validation modules used in runtime path:
 
 Some runtime modules also validate event-shaped envelopes for internal transport (`event_id`, `event_type`, `timestamp`).
 That envelope is an integration concern and does **not** replace this canonical payload contract.
+-=-=-=-
