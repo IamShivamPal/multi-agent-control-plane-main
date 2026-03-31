@@ -3,6 +3,7 @@
 Decision Arbitrator
 Mediates between multiple decision sources (RL Brain, Rule-Based, etc.)
 """
+# NOT USED in deterministic control plane (Phase 6 cleanup)
 
 from typing import Dict, Any, Optional
 import datetime

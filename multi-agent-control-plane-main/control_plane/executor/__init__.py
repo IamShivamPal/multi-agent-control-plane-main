@@ -1,1 +1,1 @@
-self.execution_mode = "local"  # "local" or "external"
+execution_mode = "local"  # "local" or "external"

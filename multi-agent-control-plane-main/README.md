@@ -194,3 +194,22 @@ BACKEND_CORS_ORIGIN_REGEX=^https://.*\.vercel\.app$|^http://localhost:\d+$
 - Backend setup: BACKEND_SETUP.md
 - Runtime contract details: RUNTIME_CONTRACT.md
 - Project implementation review: Review_Packet.md
+
+
+# SYSTEM FLOW
+
+Monitoring → Control Plane → Decision → Execution
+
+1. Monitoring sends runtime signal
+2. Control plane ingests via /runtime-ingest
+3. Decision engine computes action
+4. Governance validates action
+5. Action executed via external system
+
+# CANONICAL BACKEND
+FastAPI
+
+# ENTRY POINT
+/control-plane/runtime-ingest
+
+FastAPI is the canonical backend

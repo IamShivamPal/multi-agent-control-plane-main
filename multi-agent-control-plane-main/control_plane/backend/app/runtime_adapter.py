@@ -65,7 +65,7 @@ def runtime_decision_cycle(service_name: str, base_url: str):
     print("CPU:", decision_request.cpu)
     print("CPU_THRESHOLD:", CPU_SCALE_UP_THRESHOLD)
     print("DecisionRequest:", decision_request)
-    decision = DecisionEngine.decide(decision_request)
+    # decision = DecisionEngine.decide(decision_request)  # ⚠️ DISABLED: Decision must ONLY be triggered via runtime-ingest endpoint
     
 
     decision_log = {

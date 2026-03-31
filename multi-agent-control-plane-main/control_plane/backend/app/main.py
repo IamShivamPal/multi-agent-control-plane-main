@@ -12,7 +12,29 @@ from .decision_engine import DecisionEngine
 from .schemas import DecisionRequest
 from app.runtime_adapter import runtime_cycle_all
 from app.dashboard_api import router as dashboard_router
+from pydantic import BaseModel, Field
+from typing import Dict, Any
+from datetime import datetime
+from app.decision_engine import DecisionEngine
+from app.decision_engine import DecisionRequest
+from control_plane.backend.app.config import ACTION_SCOPE
 
+
+
+
+
+class RuntimeIngestPayload(BaseModel):
+    service_id: str
+    timestamp: datetime
+    status: str
+    metrics: Dict[str, Any]
+    issue_detected: bool
+    issue_type: str | None = None
+    recommended_action: str | None = None
+
+
+# Stores latest state per service
+INGESTED_RUNTIME_STATE = {}
 
 
 
@@ -619,6 +641,39 @@ def _build_live_dashboard_payload() -> dict[str, Any]:
     }
 
 
+
+
+
+def enforce_action_scope(action: str, environment: str):
+    allowed = ACTION_SCOPE.get(environment, [])
+
+    if action in allowed:
+        return True, "allowed"
+    else:
+        return False, f"{action} not allowed in {environment}"
+
+
+
+import requests
+
+def execute_action(action: str, service_id: str):
+    try:
+        response = requests.post(
+            "http://localhost:5003/execute-action",
+            json={
+                "action": action,
+                "service_id": service_id
+            },
+            timeout=3
+        )
+
+        return True, response.json()
+
+    except Exception as e:
+        return False, str(e)
+
+
+
 @app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     """Return service health and runtime safety guarantees."""
@@ -800,6 +855,112 @@ def orchestration_metrics() -> dict[str, Any]:
 @app.get("/api/health")
 def api_health():
     return {"status": "ok"}
+
+
+
+
+
+
+
+
+def normalize_event_type(issue_type: str | None) -> str:
+    mapping = {
+        "high_cpu": "HIGH_CPU",
+        "high_memory": "HIGH_MEMORY",
+        "latency": "LATENCY"
+    }
+    return mapping.get(issue_type, "HIGH_CPU")  # safe fallback
+
+
+
+
+# @app.post("/control-plane/runtime-ingest")
+# def runtime_ingest(payload: RuntimeIngestPayload):
+#     try:
+#         service_id = payload.service_id
+
+#         # Store latest state
+#         INGESTED_RUNTIME_STATE[service_id] = payload.dict()
+
+#         # 🔥 MAP → DecisionRequest
+#         decision_request = DecisionRequest(
+#             event_type=normalize_event_type(payload.issue_type),          cpu=payload.metrics.get("cpu", 0),
+#             memory=payload.metrics.get("memory", 0),
+#             environment="DEV"
+# )
+
+#         # 🔥 CALL Decision Engine
+#         decision = DecisionEngine.decide(decision_request)
+
+#         return {
+#             "status": "accepted",
+#             "service_id": service_id,
+#             "decision": {
+#                 "action": decision.selected_action,
+#                 "reason": decision.reason,
+#                 "confidence": decision.confidence
+#             }
+#         }
+
+#     except Exception as e:
+#         return {
+#             "status": "error",
+#             "message": str(e)
+#         }
+
+
+
+@app.post("/control-plane/runtime-ingest")
+def runtime_ingest(payload: RuntimeIngestPayload):
+    try:
+        service_id = payload.service_id
+
+        # Store state
+        INGESTED_RUNTIME_STATE[service_id] = payload.dict()
+
+        # Decision mapping
+        decision_request = DecisionRequest(
+            event_type=normalize_event_type(payload.issue_type),
+            cpu=payload.metrics.get("cpu", 0),
+            memory=payload.metrics.get("memory", 0),
+            environment="DEV"
+        )
+
+        decision = DecisionEngine.decide(decision_request)
+
+        action = decision.selected_action
+
+        # 🔥 GOVERNANCE CHECK
+        allowed, reason = enforce_action_scope(action, "DEV")
+
+        if not allowed:
+            return {
+                "execution_id": str(decision.decision_id),
+                "status": "blocked",
+                "reason": reason,
+                "action": action
+            }
+
+        # 🔥 EXECUTION
+        success, exec_response = execute_action(action, service_id)
+
+        return {
+            "execution_id": str(decision.decision_id),
+            "status": "executed" if success else "failed",
+            "reason": decision.reason,
+            "action": action,
+            "execution_response": exec_response
+        }
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+
+
+
+
 
 
 
