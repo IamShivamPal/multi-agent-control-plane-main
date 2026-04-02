@@ -1112,28 +1112,6 @@ class AgentRuntime:
                 self._last_block_type = "self_restraint"
                 
                 return decision  # CRITICAL: Return to prevent further execution
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             
             # Remember this decision
             outcome = "pending"
