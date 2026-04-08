@@ -10,7 +10,9 @@ import datetime
 import psutil
 import subprocess
 import json
-from core.env_config import EnvironmentConfig
+from control_plane.core.env_config import EnvironmentConfig
+from control_plane.core.contracts import validate_monitor_output
+
 
 class InfraHealthMonitor:
     """Monitors and logs infrastructure health metrics."""
@@ -74,73 +76,127 @@ class InfraHealthMonitor:
         except Exception:
             return 'unhealthy'
     
-    def calculate_system_health(self, metrics, docker_status, redis_status):
-        """Calculate overall system health score."""
-        score = 100
+    # def calculate_system_health(self, metrics, docker_status, redis_status):
+    #     """Calculate overall system health score."""
+    #     score = 100
         
-        # CPU penalty
-        if metrics['cpu_percent'] > 80:
-            score -= 20
-        elif metrics['cpu_percent'] > 60:
-            score -= 10
+    #     # CPU penalty
+    #     if metrics['cpu_percent'] > 80:
+    #         score -= 20
+    #     elif metrics['cpu_percent'] > 60:
+    #         score -= 10
         
-        # Memory penalty
-        if metrics['memory_percent'] > 85:
-            score -= 20
-        elif metrics['memory_percent'] > 70:
-            score -= 10
+    #     # Memory penalty
+    #     if metrics['memory_percent'] > 85:
+    #         score -= 20
+    #     elif metrics['memory_percent'] > 70:
+    #         score -= 10
         
-        # Disk penalty
-        if metrics['disk_percent'] > 90:
-            score -= 15
-        elif metrics['disk_percent'] > 80:
-            score -= 5
+    #     # Disk penalty
+    #     if metrics['disk_percent'] > 90:
+    #         score -= 15
+    #     elif metrics['disk_percent'] > 80:
+    #         score -= 5
         
-        # Docker penalty
-        if docker_status == 'unhealthy':
-            score -= 25
-        elif docker_status == 'unavailable':
-            score -= 40
+    #     # Docker penalty
+    #     if docker_status == 'unhealthy':
+    #         score -= 25
+    #     elif docker_status == 'unavailable':
+    #         score -= 40
         
-        # Redis penalty
-        if redis_status == 'unhealthy':
-            score -= 15
+    #     # Redis penalty
+    #     if redis_status == 'unhealthy':
+    #         score -= 15
         
-        return max(0, score)
+    #     return max(0, score)
     
-    def log_health_status(self):
-        """Collect and log current health status."""
-        timestamp = datetime.datetime.now().isoformat()
+    # def log_health_status(self):
+    #     """Collect and log current health status."""
+    #     timestamp = datetime.datetime.now().isoformat()
         
-        # Collect metrics
+    #     # Collect metrics
+    #     metrics = self.get_system_metrics()
+    #     docker_status, containers_running, containers_total = self.check_docker_status()
+    #     redis_status = self.check_redis_status()
+        
+    #     # Calculate health score
+    #     health_score = self.calculate_system_health(metrics, docker_status, redis_status)
+        
+    #     # Log to CSV
+    #     with open(self.log_file, 'a', newline='') as f:
+    #         writer = csv.writer(f)
+    #         writer.writerow([
+    #             timestamp,
+    #             round(metrics['cpu_percent'], 2),
+    #             round(metrics['memory_percent'], 2),
+    #             round(metrics['disk_percent'], 2),
+    #             docker_status,
+    #             containers_running,
+    #             containers_total,
+    #             redis_status,
+    #             health_score,
+    #             self.env_config.get('environment')
+    #         ])
+        
+    #     print(f"[{self.env_config.get('environment').upper()}] Health logged: {health_score}% "
+    #           f"(CPU: {metrics['cpu_percent']:.1f}%, MEM: {metrics['memory_percent']:.1f}%, "
+    #           f"Docker: {docker_status}, Redis: {redis_status})")
+        
+    #     return health_score
+
+    def log_health_status(self):
+
         metrics = self.get_system_metrics()
         docker_status, containers_running, containers_total = self.check_docker_status()
         redis_status = self.check_redis_status()
-        
-        # Calculate health score
-        health_score = self.calculate_system_health(metrics, docker_status, redis_status)
-        
-        # Log to CSV
-        with open(self.log_file, 'a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                timestamp,
-                round(metrics['cpu_percent'], 2),
-                round(metrics['memory_percent'], 2),
-                round(metrics['disk_percent'], 2),
-                docker_status,
-                containers_running,
-                containers_total,
-                redis_status,
-                health_score,
-                self.env_config.get('environment')
-            ])
-        
-        print(f"[{self.env_config.get('environment').upper()}] Health logged: {health_score}% "
-              f"(CPU: {metrics['cpu_percent']:.1f}%, MEM: {metrics['memory_percent']:.1f}%, "
-              f"Docker: {docker_status}, Redis: {redis_status})")
-        
-        return health_score
+
+        issue_detected = False
+        issue_type = None
+
+        if metrics['cpu_percent'] > 90:
+            issue_detected = True
+            issue_type = "high_cpu"
+
+        elif metrics['memory_percent'] > 90:
+            issue_detected = True
+            issue_type = "high_memory"
+
+        elif docker_status != "healthy":
+            issue_detected = True
+            issue_type = "docker_unavailable"
+
+        elif redis_status != "healthy":
+            issue_detected = True
+            issue_type = "redis_unhealthy"
+
+        status = "healthy" if not issue_detected else "unhealthy"
+
+        output = {
+            "service_id": "infra_system",
+            "cpu": metrics['cpu_percent'],
+            "memory": metrics['memory_percent'],
+            "error_rate": 0.0,
+            "status": status,
+            "issue_detected": issue_detected,
+            "issue_type": issue_type
+        }
+        validate_monitor_output(output)
+
+        print("📡 Monitoring Output:", output)
+
+        return output
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     import argparse
@@ -150,10 +206,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     monitor = InfraHealthMonitor(args.env)
-    health_score = monitor.log_health_status()
+    # health_score = monitor.log_health_status()
     
     # Exit with error code if health is critical
-    if health_score < 50:
-        exit(1)
-    else:
-        exit(0)
+    # if health_score < 50:
+    # #     exit(1)
+    # else:
+    #     exit(0)
