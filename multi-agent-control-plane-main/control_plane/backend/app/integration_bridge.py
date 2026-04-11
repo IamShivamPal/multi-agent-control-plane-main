@@ -20,8 +20,6 @@ Default local ports:
 import sys
 import os
 import json
-import threading
-import time
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
 from collections import deque
@@ -61,25 +59,18 @@ class IntegrationBridge:
             try:
                 self.agent_runtime = AgentRuntime(env="production")
                 self.control_plane = MultiAppControlPlane(env="production")
-                self._start_sync_thread()
+                self._sync_once()
             except Exception as e:
                 print(f"Warning: Control Plane integration failed: {e}")
                 self.sync_enabled = False
     
-    def _start_sync_thread(self) -> None:
-        """Start background sync thread."""
-        def sync_loop():
-            while True:
-                try:
-                    self._sync_metrics()
-                    self._sync_decisions()
-                    time.sleep(5)  # Sync every 5 seconds
-                except Exception as e:
-                    print(f"Sync error: {e}")
-                    time.sleep(5)
-        
-        thread = threading.Thread(target=sync_loop, daemon=True)
-        thread.start()
+    def _sync_once(self) -> None:
+        """Run a single non-loop sync pass."""
+        try:
+            self._sync_metrics()
+            self._sync_decisions()
+        except Exception as e:
+            print(f"Sync error: {e}")
     
     def _sync_metrics(self) -> None:
         """Sync metrics with control plane."""

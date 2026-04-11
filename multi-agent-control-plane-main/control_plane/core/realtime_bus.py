@@ -59,12 +59,19 @@ class RealtimeBus:
         
         messages = []
         try:
-            while True:
-                message = self.queues[topic].get(timeout=timeout)
+            message = self.queues[topic].get(timeout=timeout)
+            messages.append(message)
+            self.queues[topic].task_done()
+        except queue.Empty:
+            return messages
+
+        while not self.queues[topic].empty():
+            try:
+                message = self.queues[topic].get_nowait()
                 messages.append(message)
                 self.queues[topic].task_done()
-        except queue.Empty:
-            pass
+            except queue.Empty:
+                break
         return messages
     
     def _log_performance(self, topic: str):

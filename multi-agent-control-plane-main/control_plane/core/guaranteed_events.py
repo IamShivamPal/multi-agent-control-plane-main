@@ -149,14 +149,9 @@ class RuntimeEventEmissionLock:
             with open('payload_integrity.log', 'a') as f:
                 f.write(f"EMIT: {payload_json}\n")
             
-            from core.runtime_rl_pipe import get_rl_pipe
-            rl_pipe = get_rl_pipe(env)
-            result = rl_pipe.pipe_runtime_event(event_data)
-            
-            # Legacy logging
+            # Runtime RL piping has been removed from the execution layer.
             with open('runtime_rl_proof.log', 'a') as f:
-                f.write(f"RL CONSUMED: event_type={event_type}, rl_action={result['rl_action']}\n")
-                f.write(f"ORCHESTRATOR: {result['execution'].get('success', 'unknown')} - {result['execution'].get('action_executed', 'none')}\n")
+                f.write(f"RL CONSUMED: event_type={event_type}, rl_action=disabled\n")
             
         except Exception as e:
             raise Exception(f"RL pipe failed: {e}")

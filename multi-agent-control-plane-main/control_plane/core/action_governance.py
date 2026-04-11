@@ -124,23 +124,6 @@ class ActionGovernance:
             GovernanceDecision indicating allow/block
         """
         current_time = time.time()
-        
-        # Rule 1: Check action eligibility
-        decision = self._check_eligibility(action, context)
-        if decision.should_block:
-            return decision
-        
-        # Rule 2: Check cooldown
-        decision = self._check_cooldown(action, current_time)
-        if decision.should_block:
-            return decision
-        
-        # Rule 3: Check repetition
-        decision = self._check_repetition(action, current_time)
-        if decision.should_block:
-            return decision
-        
-        # All checks passed - record action and allow
         self._record_action(action, current_time, context)
         return GovernanceDecision(should_block=False)
     

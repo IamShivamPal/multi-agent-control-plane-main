@@ -46,7 +46,7 @@
 
 #     def run(self):
 
-#         while True:
+#         for _ in range(1):
 #             self.collect_metrics()
 #             time.sleep(30)
 

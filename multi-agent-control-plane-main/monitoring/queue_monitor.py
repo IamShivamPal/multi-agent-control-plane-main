@@ -102,16 +102,20 @@ class QueueMonitor:
         
         self.print_recent_messages(5)
     
-    def run_continuous_monitoring(self, interval=30):
-        """Run continuous monitoring with periodic stats."""
-        print(f"🚀 Starting continuous queue monitoring (interval: {interval}s)")
+    def run_continuous_monitoring(self, interval=30, cycles=1):
+        """Run bounded monitoring with periodic stats."""
+        if cycles <= 0:
+            raise ValueError("cycles must be >= 1 in loopless mode")
+
+        print(f"🚀 Starting bounded queue monitoring (interval: {interval}s, cycles: {cycles})")
         print(f"📝 Logging to: {self.log_file}")
         
         try:
-            while True:
+            for idx in range(cycles):
                 self.print_stats()
-                print(f"⏰ Next update in {interval} seconds...")
-                time.sleep(interval)
+                if idx < cycles - 1:
+                    print(f"⏰ Next update in {interval} seconds...")
+                    time.sleep(interval)
                 
         except KeyboardInterrupt:
             print("\n🛑 Monitoring stopped by user")
@@ -127,6 +131,8 @@ if __name__ == "__main__":
                        help='Run continuous monitoring')
     parser.add_argument("--interval", type=int, default=30,
                        help='Monitoring interval in seconds')
+    parser.add_argument("--cycles", type=int, default=1,
+                       help='Number of monitoring cycles (must be >=1)')
     parser.add_argument("--test", action='store_true',
                        help='Run message flow test')
     parser.add_argument("--stats", action='store_true',
@@ -144,7 +150,7 @@ if __name__ == "__main__":
         monitor.print_stats()
         monitor.print_recent_messages(args.history)
     elif args.continuous:
-        monitor.run_continuous_monitoring(args.interval)
+        monitor.run_continuous_monitoring(args.interval, args.cycles)
     else:
         # Default: show stats and recent messages
         monitor.print_stats()

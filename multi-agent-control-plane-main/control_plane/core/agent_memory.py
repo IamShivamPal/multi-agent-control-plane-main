@@ -388,28 +388,9 @@ class AgentMemory:
             Dictionary with override recommendation
         """
         context = self.get_memory_context(entity_id)
-        
         override_decision = None
         override_reason = None
         override_applied = False
-        
-        # Override 1: Too many recent failures
-        if context['recent_failures'] >= failure_threshold:
-            override_decision = 'noop'
-            override_reason = f"memory_override_recent_failures (count={context['recent_failures']})"
-            override_applied = True
-        
-        # Override 2: Repeated action suppression
-        elif context['repeated_actions'] >= repetition_threshold:
-            override_decision = 'observe'
-            override_reason = f"memory_override_repetition_suppression (count={context['repeated_actions']})"
-            override_applied = True
-        
-        # Override 3: High instability
-        elif context['instability_score'] > 66:  # >66% failure rate
-            override_decision = 'noop'
-            override_reason = f"memory_override_instability (score={context['instability_score']})"
-            override_applied = True
         
         return {
             'override_applied': override_applied,

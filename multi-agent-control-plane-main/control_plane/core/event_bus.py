@@ -78,20 +78,19 @@ class EventBus:
             
             # Process existing messages for this channel
             def process_messages():
-                while True:
-                    for i, (msg_channel, message) in enumerate(self._messages):
-                        if msg_channel == channel:
-                            start_time = time.time()
-                            try:
-                                data = json.loads(message)
-                            except:
-                                data = message
-                            callback(data)
-                            latency = (time.time() - start_time) * 1000
-                            self._log_performance('subscribe', channel, latency, len(str(data)))
+                pending = list(self._messages)
+                for i, (msg_channel, message) in enumerate(pending):
+                    if msg_channel == channel:
+                        start_time = time.time()
+                        try:
+                            data = json.loads(message)
+                        except:
+                            data = message
+                        callback(data)
+                        latency = (time.time() - start_time) * 1000
+                        self._log_performance('subscribe', channel, latency, len(str(data)))
+                        if i < len(self._messages):
                             self._messages.pop(i)
-                            break
-                    time.sleep(0.1)
             
             thread = threading.Thread(target=process_messages, daemon=True)
             thread.start()

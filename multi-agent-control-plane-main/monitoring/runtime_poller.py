@@ -185,11 +185,13 @@ class RuntimePoller:
         health_endpoint: str = "/api/health",
         workers: int = 1,
         interval_seconds: float = 10.0,
-        iterations: Optional[int] = None,
+        iterations: Optional[int] = 1,
     ) -> None:
-        """Run continuous polling every X seconds and emit runtime contract payloads."""
-        count = 0
-        while True:
+        """Run bounded polling and emit runtime contract payloads."""
+        if iterations is None or iterations <= 0:
+            raise ValueError("iterations must be a positive integer in loopless mode")
+
+        for count in range(iterations):
             poll_result = self.poll_service(
                 service_name=service_name,
                 base_url=base_url,
@@ -202,11 +204,8 @@ class RuntimePoller:
                 "runtime_payload": runtime_payload,
             })
 
-            count += 1
-            if iterations is not None and count >= iterations:
-                break
-
-            time.sleep(interval_seconds)
+            if count < iterations - 1:
+                time.sleep(interval_seconds)
 
     def _log_result(self, result: Dict[str, Any]) -> None:
         """Persist poll result to CSV."""
@@ -253,7 +252,7 @@ if __name__ == "__main__":
     parser.add_argument("--latency-warn-ms", type=float, default=2000.0, help="Latency warning threshold")
     parser.add_argument("--workers", type=int, default=1, help="Worker count for runtime payload")
     parser.add_argument("--interval-seconds", type=float, default=10.0, help="Polling interval in seconds")
-    parser.add_argument("--iterations", type=int, default=1, help="Number of polls (use <=0 for continuous)")
+    parser.add_argument("--iterations", type=int, default=1, help="Number of polls (must be >=1)")
 
     args = parser.parse_args()
 
@@ -264,14 +263,7 @@ if __name__ == "__main__":
     )
 
     if args.iterations <= 0:
-        poller.run_monitoring_loop(
-            service_name=args.service,
-            base_url=args.base_url,
-            health_endpoint=args.health_endpoint,
-            workers=args.workers,
-            interval_seconds=args.interval_seconds,
-            iterations=None,
-        )
+        raise ValueError("--iterations must be >= 1 in loopless mode")
     elif args.iterations == 1:
         poll_result = poller.poll_service(
             service_name=args.service,

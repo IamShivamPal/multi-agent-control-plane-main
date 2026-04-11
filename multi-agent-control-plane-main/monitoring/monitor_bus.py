@@ -17,18 +17,16 @@ def main():
     last_count = len(bus.get_messages())
     print(f"Ignoring {last_count} historical events")
     
-    try:
-        import time
-        while True:
-            messages = bus.get_messages()
-            if len(messages) > last_count:
-                # Show only new messages
-                for msg in messages[last_count:]:
-                    print_event(msg)
-                last_count = len(messages)
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("\n🛑 Bus monitor stopped")
+    import time
+    for _ in range(30):
+        messages = bus.get_messages()
+        if len(messages) > last_count:
+            # Show only new messages
+            for msg in messages[last_count:]:
+                print_event(msg)
+            last_count = len(messages)
+        time.sleep(1)
+    print("\n🛑 Bus monitor completed bounded run")
 
 if __name__ == "__main__":
     main()

@@ -100,59 +100,48 @@ class MultiDeployAgent:
         print("All workers stopped")
     
     def _worker_loop(self, agent, worker_id):
-        """Worker thread main loop."""
-        while self.running:
-            try:
-                # Get work from queue (blocking with timeout)
-                work_item = self.work_queue.get(timeout=1)
-                
-                if work_item is None:  # Poison pill
-                    break
-                
-                # Process deployment
-                dataset, action_type = work_item
-                
-                # Simulate deployment work
-                start_time = time.time()
-                
-                if action_type == 'deploy':
-                    from utils import trigger_dashboard_deployment
-                    status, response_time = trigger_dashboard_deployment(env=self.env)
+        """Worker thread one-shot processor."""
+        try:
+            if not self.running:
+                return
+
+            work_item = self.work_queue.get(timeout=1)
+            if work_item is None:
+                return
+
+            dataset, action_type = work_item
+
+            if action_type == 'deploy':
+                from utils import trigger_dashboard_deployment
+                status, response_time = trigger_dashboard_deployment(env=self.env)
+            else:
+                if StageDeterminismLock.is_stage_env(self.env):
+                    response_time = StageDeterminismLock.get_deterministic_response_time(action_type, worker_id)
+                    time.sleep(response_time / 1000)
+                    status = 'success'
+                    log_determinism_status(self.env, f"Worker {worker_id} {action_type} timing")
                 else:
-                    # Stage environment: Use deterministic timing
-                    if StageDeterminismLock.is_stage_env(self.env):
-                        response_time = StageDeterminismLock.get_deterministic_response_time(action_type, worker_id)
-                        time.sleep(response_time / 1000)  # Convert to seconds
-                        status = 'success'
-                        log_determinism_status(self.env, f"Worker {worker_id} {action_type} timing")
-                    else:
-                        # Original variable timing for dev/prod
-                        time.sleep(0.5 + (worker_id * 0.1))  # Vary by worker
-                        status, response_time = 'success', 500 + (worker_id * 100)
-                
-                # Guaranteed event emission - no silent failures
-                from control_plane.core.guaranteed_events import emit_deploy_event, emit_scale_event
-                try:
-                    if action_type == 'deploy':
-                        emit_deploy_event(self.env, status, response_time, dataset)
-                    elif action_type in ['scale_up', 'scale_down', 'scale']:
-                        emit_scale_event(self.env, status, response_time, dataset)
-                    else:
-                        emit_deploy_event(self.env, status, response_time, dataset)
-                except Exception as e:
-                    print(f"CRITICAL: Event emission failed for {action_type}: {e}")
-                    # Continue processing but log the failure
-                
-                # Log the deployment
-                agent.log_deployment(dataset, status, response_time, action_type)
-                
-                # Mark task as done
-                self.work_queue.task_done()
-                
-            except queue.Empty:
-                continue  # Timeout, check if still running
+                    time.sleep(0.5 + (worker_id * 0.1))
+                    status, response_time = 'success', 500 + (worker_id * 100)
+
+            from control_plane.core.guaranteed_events import emit_deploy_event, emit_scale_event
+            try:
+                if action_type == 'deploy':
+                    emit_deploy_event(self.env, status, response_time, dataset)
+                elif action_type in ['scale_up', 'scale_down', 'scale']:
+                    emit_scale_event(self.env, status, response_time, dataset)
+                else:
+                    emit_deploy_event(self.env, status, response_time, dataset)
             except Exception as e:
-                print(f"Worker {worker_id} error: {e}")
+                print(f"CRITICAL: Event emission failed for {action_type}: {e}")
+
+            agent.log_deployment(dataset, status, response_time, action_type)
+            self.work_queue.task_done()
+
+        except queue.Empty:
+            return
+        except Exception as e:
+            print(f"Worker {worker_id} error: {e}")
     
     def submit_deployment(self, dataset, action_type='deploy'):
         """Submit deployment work to the queue."""
@@ -202,49 +191,47 @@ class MultiDeployAgent:
         return True
     
     def _monitor_performance(self):
-        """Monitor and log performance metrics."""
+        """Run a single non-loop performance snapshot."""
         last_check = time.time()
         last_request_count = 0
-        
-        while self.running:
-            time.sleep(5)  # Check every 5 seconds
-            
-            current_time = time.time()
-            
-            # Calculate metrics
-            queue_size = self.work_queue.qsize()
-            active_workers = sum(1 for t in self.worker_threads if t.is_alive())
-            
-            # Estimate requests per second (simplified)
-            time_diff = current_time - last_check
-            requests_per_second = 0  # Would need actual request counting
-            
-            # Log performance metrics
-            timestamp = datetime.datetime.now().isoformat()
-            with open(self.throughput_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([
-                    timestamp, self.workers, active_workers, queue_size,
-                    requests_per_second, 0, self.env  # avg_response_time would need calculation
-                ])
-            
-            # Record queue metrics
-            self.metrics.record_queue_metric(
-                f"deploy_queue_{self.env}", queue_size, 
-                enqueue_rate=0, dequeue_rate=0  # Would need actual tracking
-            )
-            
-            # Record uptime metrics for multi-deploy service
-            uptime_seconds = current_time - (last_check if hasattr(self, '_start_time') else current_time)
-            if not hasattr(self, '_start_time'):
-                self._start_time = current_time
-            
-            self.metrics.record_uptime_metric(
-                f"multi_deploy_agent_{self.env}", "running", 
-                uptime_seconds, 0
-            )
-            
-            last_check = current_time
+
+        if not self.running:
+            return
+
+        current_time = time.time()
+
+        # Calculate metrics
+        queue_size = self.work_queue.qsize()
+        active_workers = sum(1 for t in self.worker_threads if t.is_alive())
+
+        # Estimate requests per second (simplified)
+        time_diff = current_time - last_check
+        requests_per_second = 0
+
+        # Log performance metrics
+        timestamp = datetime.datetime.now().isoformat()
+        with open(self.throughput_log, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                timestamp, self.workers, active_workers, queue_size,
+                requests_per_second, 0, self.env
+            ])
+
+        # Record queue metrics
+        self.metrics.record_queue_metric(
+            f"deploy_queue_{self.env}", queue_size,
+            enqueue_rate=0, dequeue_rate=0
+        )
+
+        # Record uptime metrics for multi-deploy service
+        uptime_seconds = current_time - (last_check if hasattr(self, '_start_time') else current_time)
+        if not hasattr(self, '_start_time'):
+            self._start_time = current_time
+
+        self.metrics.record_uptime_metric(
+            f"multi_deploy_agent_{self.env}", "running",
+            uptime_seconds, 0
+        )
     
     def get_status(self):
         """Get current status of the multi-deploy agent."""
@@ -263,6 +250,7 @@ if __name__ == "__main__":
     parser.add_argument("--env", choices=['dev', 'stage', 'prod'], default='dev')
     parser.add_argument("--workers", type=int, default=3, help='Number of worker agents')
     parser.add_argument("--test", action='store_true', help='Run test workload')
+    parser.add_argument("--status-cycles", type=int, default=1, help='Number of status snapshots')
     
     args = parser.parse_args()
     
@@ -283,8 +271,10 @@ if __name__ == "__main__":
         print("Test workload completed")
     
     try:
-        print("Multi-Deploy Agent running. Press Ctrl+C to stop.")
-        while True:
+        print("Multi-Deploy Agent running in bounded status mode.")
+        if args.status_cycles <= 0:
+            raise ValueError("--status-cycles must be >= 1 in loopless mode")
+        for _ in range(args.status_cycles):
             status = multi_agent.get_status()
             print(f"Status: {status['active_workers']}/{status['workers']} workers, "
                   f"queue: {status['queue_size']}")

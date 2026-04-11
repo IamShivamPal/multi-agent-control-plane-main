@@ -34,7 +34,7 @@ def get_user_feedback_from_terminal(state, action, outcome):
     print(f"  - Agent's Chosen Action: {action}")
     print(f"  - System Outcome: {outcome}")
     
-    while True:
+    for _ in range(3):
         response = input("Do you accept this action as a good solution for this problem? (y/n): ").lower().strip()
         if response in ['y', 'yes']:
             print(" -> Feedback recorded: ACCEPTED.")
@@ -44,6 +44,8 @@ def get_user_feedback_from_terminal(state, action, outcome):
             return 'rejected'
         else:
             print("Invalid input. Please enter 'y' for yes or 'n' for no.")
+    print(" -> Max attempts reached. Recording REJECTED by default.")
+    return 'rejected'
 
 def log_user_feedback(log_file, state, action, outcome, feedback):
     """

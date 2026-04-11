@@ -37,10 +37,9 @@ class TelemetryCollector:
         """Get current status of all agents."""
         return {
             "deploy_agent": "active",
-            "issue_detector": "monitoring", 
             "uptime_monitor": "tracking",
-            "auto_heal": "ready",
-            "rl_optimizer": "learning"
+            "execution_layer": "ready",
+            "telemetry": "collecting"
         }
     
     def _store_telemetry(self, entry):

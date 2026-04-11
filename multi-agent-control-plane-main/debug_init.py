@@ -5,8 +5,7 @@ import traceback
 
 def test_init():
     print("Attempting AgentRuntime initialization...")
-    with patch('agent_runtime.AutoScaler'), \
-         patch('agent_runtime.MultiDeployAgent'), \
+    with patch('agent_runtime.MultiDeployAgent'), \
          patch('agent_runtime.RedisEventBus'):
         try:
             agent = AgentRuntime(env='dev', loop_interval=0)

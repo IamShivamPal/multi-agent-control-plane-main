@@ -173,14 +173,6 @@ class HealthSignalAdapter(PerceptionAdapter):
         if status in ['critical', 'down', 'failing']:
             return PerceptionPriority.CRITICAL.value
         
-        # High priority if error rate is high
-        if error_rate > 0.05:  # >5% error rate
-            return PerceptionPriority.HIGH.value
-        
-        # High priority if resource usage is very high
-        if cpu > 90 or memory > 90:
-            return PerceptionPriority.HIGH.value
-        
         # Medium priority if status is degraded
         if status in ['degraded', 'warning']:
             return PerceptionPriority.MEDIUM.value

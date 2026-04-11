@@ -41,14 +41,10 @@ from control_plane.core.proof_logger import write_proof, ProofEvents
 
 # Existing system modules
 from control_plane.core.env_config import EnvironmentConfig
-from control_plane.core.runtime_rl_pipe import get_rl_pipe
 from control_plane.core.rl_orchestrator_safe import get_safe_executor
-from control_plane.core.decision_arbitrator import DecisionArbitrator
-from auto_scaler import AutoScaler
 from control_plane.agents.multi_deploy_agent import MultiDeployAgent
 from control_plane.core.redis_event_bus import RedisEventBus
 from control_plane.core.event_bus import EventBus
-from control_plane.agents.issue_detector import IssueDetector
 from control_plane.agents.uptime_monitor import UptimeMonitor
 from control_plane.core.runtime_event_validator import RuntimeEventValidator
 
@@ -178,8 +174,7 @@ class AgentRuntime:
         """Initialize system components."""
         self.logger.info("Initializing system components", agent_state=self.state_manager.current_state.value)
         
-        # RL Pipeline
-        self.rl_pipe = get_rl_pipe(self.env)
+        self.rl_pipe = None
         
         # Safe Executor
         self.safe_executor = get_safe_executor(self.env)
@@ -202,22 +197,7 @@ class AgentRuntime:
         # Event Validator
         self.event_validator = RuntimeEventValidator()
         
-        # Auto-Scaler & Multi-Deploy Agent (for sensing and rule-based advice)
-        self.auto_scaler = AutoScaler(self.env)
-        disable_workers = os.getenv("PRAVAH_DISABLE_DEPLOY_WORKERS", "").strip().lower() in {
-            "1",
-            "true",
-            "yes",
-            "on",
-        }
-        if disable_workers:
-            self.auto_scaler.multi_agent = None
-        else:
-            self.auto_scaler.multi_agent = MultiDeployAgent(self.env, workers=3)
-            self.auto_scaler.multi_agent.start_workers()
-        
-        # Decision Arbitrator
-        self.arbitrator = DecisionArbitrator(self.env)
+        self.auto_scaler = None
         
         # Issue Detector (will be initialized when needed)
         self.issue_detector = None
@@ -508,19 +488,6 @@ class AgentRuntime:
                 # RETURN 1: Found a perception event
                 return perception.data
             
-            # SIDEBAR: Internal Agent Sensors (e.g. Scaling Queue)
-            if self.auto_scaler and self.auto_scaler.multi_agent:
-                queue_depth = self.auto_scaler.multi_agent.work_queue.qsize()
-                
-                # If queue is high, synthesize a internal event
-                if queue_depth > 5:
-                     return {
-                         "event_type": "high_queue", 
-                         "queue_depth": queue_depth, 
-                         "timestamp": datetime.utcnow().isoformat(),
-                         "source": "internal_sensor"
-                     }
-
             # RETURN 2: Nothing detected, Agent remains Idle
             return None
 
@@ -1004,33 +971,13 @@ class AgentRuntime:
             #     memory_context=memory_signals
             # )
             
-            # Advisor 2: AutoScaler Rules (Heuristic Suggester)
-            queue_depth = 0
-            if self.auto_scaler and self.auto_scaler.multi_agent:
-                queue_depth = self.auto_scaler.multi_agent.work_queue.qsize()
-            
-            # rule_recommendation = self.auto_scaler.get_recommendation(queue_depth)
-
-            # STEP 6: ARBITRATE BETWEEN ADVISORS
-            # arbitrated_result = self.arbitrator.arbitrate(
-            #     rl_decision=rl_suggestion,
-            #     rule_decision=rule_recommendation,
-            #     context={
-            #         'env': self.env,
-            #         'queue_depth': queue_depth,
-            #         'app_id': validated_data.get('app_id'),
-            #         'event_type': validated_data.get('event_type')
-            #     }
-            # )
-            
-            # STEP 7: FINALIZE DECISION
             decision = {
-                'rl_action': 0, # Placeholder
-                'action_name': arbitrated_result['action'],
-                'source': arbitrated_result['source'],
-                'reason': arbitrated_result['reason'],
-                'confidence': arbitrated_result['confidence'],
-                'execution_result': {}, # Not executed yet
+                'rl_action': 0,
+                'action_name': 'noop',
+                'source': 'fallback',
+                'reason': 'External decision failed and no rule engine is enabled',
+                'confidence': 0.0,
+                'execution_result': {},
                 'timestamp': datetime.utcnow().isoformat(),
                 'input_data': validated_data,
                 'override_applied': False,
