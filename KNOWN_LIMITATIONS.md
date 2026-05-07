@@ -1,0 +1,3 @@
+- Environment hardcoded as DEV
+- No persistent storage (in-memory state)
+- No retry mechanism for execution failures

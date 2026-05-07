@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent x RL - Premium Dashboard</title>
+    <style>
+        :root {
+            /* Dark Theme (Default) */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #a855f7;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --header-bg: rgba(15, 23, 42, 0.8);
+            --main-bg: radial-gradient(circle at top right, #1e293b, #0f172a);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --border: rgba(255, 255, 255, 0.1);
+            --sidebar-item-hover: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #9333ea;
+            --bg-dark: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --main-bg: #f1f5f9;
+            --text-main: #0f172a;
+            --text-dim: #64748b;
+            --success: #059669;
+            --warning: #d97706;
+            --error: #dc2626;
+            --border: rgba(0, 0, 0, 0.1);
+            --sidebar-item-hover: rgba(0, 0, 0, 0.05);
+            --input-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--main-bg);
+            min-height: 100vh;
+            color: var(--text-main);
+            transition: background 0.3s, color 0.3s;
+            overflow: hidden;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .agent-status-mini {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Content Styling */
+        .main {
+            padding: 32px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+
+        .badges {
+            display: flex;
+            gap: 12px;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-frozen {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-warn {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-pink {
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
+            border: 1px solid rgba(244, 114, 182, 0.3);
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background: var(--sidebar-item-hover);
+        }
+
+        .endpoint-card {
+            background: var(--sidebar-item-hover);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+        }
+
+        .btn-test {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .response-box {
+            background: black;
+            color: #94a3b8;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Metric Cards */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .metric-card .val {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .metric-card .label {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+        }
+
+        /* Content Areas */
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 24px;
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-panel h3 {
+            margin-bottom: 20px;
+            font-size: 1.125rem;
+        }
+
+        /* Buttons */
+        .btn-action {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+
+        /* Logs */
+        .logs-box {
+            background: var(--input-bg);
+            border-radius: 16px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .log-line {
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 4px;
+        }
+
+        .log-ts {
+            color: var(--text-dim);
+            margin-right: 8px;
+        }
+
+        /* RL Explorer Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            color: var(--text-dim);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span>🧠</span>
+                <span>InsightFlow</span>
+            </div>
+
+            <nav class="nav-items">
+                <div class="nav-item active" onclick="switchTab('agent')">
+                    <span>🤖</span> Agent Monitor
+                </div>
+                <div class="nav-item" onclick="switchTab('explorer')">
+                    <span>📡</span> RL Explorer
+                </div>
+            </nav>
+
+            <div class="agent-status-mini" id="miniStatus">
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">CONNECTED AGENT</div>
+                <div style="font-weight: 700;" id="miniAgentId">Loading...</div>
+                <div style="font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px;">
+                    <span style="width: 8px; height: 8px; background: var(--success); border-radius: 50%;"></span>
+                    <span id="miniState">Operational</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Surface -->
+        <main class="main">
+            <!-- Header with Dynamic Badges -->
+            <div class="header">
+                <h2 id="pageTitle">Agent Monitor</h2>
+                <div style="display: flex; gap: 16px; align-items: center;">
+                    <div class="badges" id="headerBadges">
+                        <span class="badge badge-live">Live</span>
+                        <span class="badge badge-frozen">Frozen</span>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+                        <span id="themeIcon">🌙</span>
+                        <span id="themeLabel">Dark</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Global Metrics Row -->
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="val" id="mSuccessRate">--</div>
+                    <div class="label">Success Rate (RL)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="val" id="mSafetyRate">--</div>
+                    <div class="label">Safe Action Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="val" id="mLatency">--</div>
+                    <div class="label">Avg Latency</div>
+                </div>
+                <div class="metric-card">
+                    <div class="val" id="mUptime">--</div>
+                    <div class="label">System Uptime</div>
+                </div>
+            </div>
+
+            <!-- Page 1: Agent Monitor -->
+            <div id="tab-agent" class="page active">
+                <div class="grid-2">
+                    <div class="main-col">
+                        <div class="glass-panel" id="resultPanel" style="display: none;">
+                            <h3>📋 Last Autonomous Decision</h3>
+                            <div id="decisionContent"></div>
+                        </div>
+
+                        <div class="glass-panel">
+                            <h3>🎭 Trigger Scenarios</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;" id="scenarioGrid">
+                                <!-- Loaded via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-col">
+                        <div class="glass-panel">
+                            <h3>🧩 Quick Onboarding</h3>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <input type="text" id="onboardApp" placeholder="App Name (e.g. my-app)"
+                                    style="width: 100%; padding: 10px; border-radius: 8px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main);">
+                                <input type="text" id="onboardRepo" placeholder="Repo URL (https://...)"
+                                    style="width: 100%; padding: 10px; border-radius: 8px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main);">
+                                <select id="onboardRuntime"
+                                    style="width: 100%; margin-bottom: 4px; padding: 10px; border-radius: 8px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main); outline: none; cursor: pointer;">
+                                    <option value="" disabled selected
+                                        style="background: var(--bg-dark); color: var(--text-main);">Select Runtime Type
+                                    </option>
+                                    <option value="backend"
+                                        style="background: var(--bg-dark); color: var(--text-main);">Backend</option>
+                                    <option value="frontend"
+                                        style="background: var(--bg-dark); color: var(--text-main);">Frontend</option>
+                                    <option value="fullstack"
+                                        style="background: var(--bg-dark); color: var(--text-main);">Fullstack</option>
+                                </select>
+                                <button class="btn-action" onclick="onboardSimple()">🚀 Onboard App</button>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel">
+                            <h3>📝 Execution Stream</h3>
+                            <div class="logs-box" id="logsPanel"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 2: RL Explorer (Service Diagnostics) -->
+            <div id="tab-explorer" class="page">
+                <div class="glass-panel" style="background: rgba(15, 23, 42, 0.6);">
+                    <div style="display: flex; align-items: flex-start; gap: 16px;">
+                        <span style="font-size: 2rem;">🧠</span>
+                        <div>
+                            <h2 style="color: #10b981; margin-bottom: 12px;">RL Decision Brain</h2>
+                            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                <span class="badge badge-live" id="rlHealthBadge">Checking...</span>
+                                <span class="badge badge-frozen" id="rlModeBadge">DEMO-FROZEN</span>
+                            </div>
+                            <p style="color: var(--text-dim); font-size: 0.85rem;">
+                                Version: 1.0 | Stateless | Deterministic | Safety-Caged
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3>� API Endpoints</h3>
+                    <div class="endpoint-card">
+                        <div><strong>GET /health</strong> - Health check</div>
+                        <button class="btn-test" onclick="testEndpoint('rl/health')">Test</button>
+                    </div>
+                    <div class="endpoint-card">
+                        <div><strong>POST /decide</strong> - Make decision</div>
+                        <button class="btn-test" onclick="switchTab('explorer-test')">Test</button>
+                    </div>
+                    <div class="endpoint-card">
+                        <div><strong>GET /scope</strong> - Action scope</div>
+                        <button class="btn-test" onclick="testEndpoint('rl/scope')">Test</button>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3>📊 Response</h3>
+                    <div id="apiResponse" class="response-box">Click a test button to see response...</div>
+                </div>
+
+                <div class="glass-panel">
+                    <h3>🎯 Action Scope</h3>
+                    <div id="scopeTextContainer" style="font-family: monospace; line-height: 1.6;">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 2.1: RL Decide Tester (Internal logic) -->
+            <div id="tab-explorer-test" class="page">
+                <button onclick="switchTab('explorer')"
+                    style="background: none; border: none; color: var(--primary); cursor: pointer; margin-bottom: 16px;">←
+                    Back to Explorer</button>
+                <div class="glass-panel">
+                    <h3>🧪 Decide API Tester</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <div>
+                            <p style="margin-bottom: 12px;">Raw Payload (JSON)</p>
+                            <textarea id="rawPayload"
+                                style="width: 100%; height: 200px; background: var(--input-bg); color: var(--success); border: 1px solid var(--primary); border-radius: 12px; padding: 12px; font-family: monospace;">{
+  "event_type": "resource_alert",
+  "environment": "stage",
+  "event_data": {
+    "cpu_usage": 92,
+    "service": "api-gateway"
+  }
+}</textarea>
+                        </div>
+                        <div>
+                            <button class="btn-action" style="margin-top: 32px;" onclick="testRLRaw()">Send Raw
+                                Request</button>
+                            <div id="testOutput"
+                                style="margin-top: 16px; font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; height: 150px; overflow-y: auto;">
+                                Response will appear here...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+    </main>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/api';
+        let currentTab = 'agent';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Init
+            const savedTheme = localStorage.getItem('insight-theme') || 'dark';
+            applyTheme(savedTheme);
+
+            refreshAll();
+            setInterval(refreshAll, 5000);
+        });
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const btn = document.getElementById('themeBtn');
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+
+            if (theme === 'light') {
+                icon.innerText = '☀️';
+                label.innerText = 'Light';
+            } else {
+                icon.innerText = '🌙';
+                label.innerText = 'Dark';
+            }
+            localStorage.setItem('insight-theme', theme);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            applyTheme(current === 'light' ? 'dark' : 'light');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+
+            // Find current nav item
+            const navItems = Array.from(document.querySelectorAll('.nav-item'));
+            const targetNav = navItems.find(item => item.innerText.toLowerCase().includes(tabId));
+            if (targetNav) targetNav.classList.add('active');
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            currentTab = tabId;
+            const titles = { 'agent': 'Agent Monitor', 'explorer': 'RL Explorer' };
+            document.getElementById('pageTitle').innerText = titles[tabId];
+
+            if (tabId === 'explorer') loadRLDiagnostics();
+        }
+
+        async function refreshAll() {
+            await Promise.all([
+                loadStatus(),
+                loadScenarios()
+            ]);
+        }
+
+        async function loadStatus() {
+            try {
+                const res = await fetch(`${API_BASE}/agent/status`);
+                const data = await res.json();
+
+                // Sidebar
+                document.getElementById('miniAgentId').innerText = data.agent_id;
+                document.getElementById('miniState').innerText = data.state.toUpperCase();
+
+                // Badges
+                const isDemo = data.env !== 'prod'; // Mock for now or use real flag if added to status
+                const badgesHtml = `
+                    <span class="badge badge-live">${data.env.toUpperCase()}</span>
+                    <span class="badge badge-frozen">Frozen</span>
+                `;
+                document.getElementById('headerBadges').innerHTML = badgesHtml;
+
+                // Metrics
+                document.getElementById('mSuccessRate').innerText = data.metrics.success_rate;
+                document.getElementById('mSafetyRate').innerText = data.metrics.safety_rate;
+                document.getElementById('mLatency').innerText = data.metrics.avg_response_time;
+                document.getElementById('mUptime').innerText = Math.floor(data.uptime) + 's';
+
+                // Real-time update to decision result if changed
+                const lastDec = data.last_decision;
+                const decDisplay = document.getElementById('decisionContent');
+                if (lastDec && typeof lastDec === 'string' && !decDisplay.innerHTML.includes(lastDec)) {
+                    displayDecision({ action_name: lastDec, reason: data.last_block_reason || 'Autonomous' });
+                } else if (lastDec && typeof lastDec === 'object' && lastDec.action_name && !decDisplay.innerHTML.includes(lastDec.action_name)) {
+                    displayDecision(lastDec);
+                }
+            } catch (e) { console.error("Status fetch fail", e); }
+        }
+
+        async function loadScenarios() {
+            if (document.getElementById('scenarioGrid').children.length > 0) return;
+            try {
+                const res = await fetch(`${API_BASE}/demo/scenarios`);
+                const data = await res.json();
+                document.getElementById('scenarioGrid').innerHTML = data.scenarios.map(s => `
+                    <button class="btn-action" onclick="runScenario('${s.endpoint}')">
+                        ${s.name}
+                    </button>
+                `).join('');
+            } catch (e) { }
+        }
+
+        async function runScenario(endpoint) {
+            const logId = Date.now();
+            addLocalLog(`<span id="log-${logId}">Triggering scenario...</span>`, 'pulse');
+            document.getElementById('resultPanel').style.display = 'block';
+
+            try {
+                const res = await fetch(`${API_BASE.replace('/api', '')}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const result = await res.json();
+
+                const logEl = document.getElementById(`log-${logId}`);
+                if (logEl) {
+                    logEl.parentElement.classList.remove('pulse');
+                    // Handle decision string or object
+                    const actionName = result.decision || result.action_name || (result.rl_decision ? result.rl_decision.final_action : 'noop');
+                    logEl.innerText = `Executed: ${actionName}`;
+                    logEl.parentElement.classList.add('success');
+                }
+
+                displayDecision(result);
+            } catch (e) {
+                const logEl = document.getElementById(`log-${logId}`);
+                if (logEl) {
+                    logEl.parentElement.classList.remove('pulse');
+                    logEl.innerText = `Failure: ${e.message}`;
+                    logEl.parentElement.classList.add('error');
+                }
+                displayDecision({ reason: e.message, action_name: 'ERROR' });
+            }
+        }
+
+        function displayDecision(d) {
+            const panel = document.getElementById('resultPanel');
+            panel.style.display = 'block';
+
+            // Robust field extraction for display
+            let action = 'noop';
+            if (d.action_name && typeof d.action_name === 'string') action = d.action_name;
+            else if (d.decision && typeof d.decision === 'string') action = d.decision;
+            else if (d.decision && d.decision.action_name) action = d.decision.action_name;
+            else if (d.rl_decision && typeof d.rl_decision.final_action === 'string') action = d.rl_decision.final_action;
+            else if (d.rl_decision && typeof d.rl_decision.proposed_action === 'string') action = d.rl_decision.proposed_action;
+            else if (d.proposed_action && typeof d.proposed_action === 'string') action = d.proposed_action;
+            else if (typeof d === 'string') action = d;
+
+            let reason = 'Autonomous evaluation';
+            if (d.reason && typeof d.reason === 'string') reason = d.reason;
+            else if (d.explanation && typeof d.explanation === 'string') reason = d.explanation;
+            else if (d.reasoning && typeof d.reasoning === 'string') reason = d.reasoning;
+            else if (d.message && typeof d.message === 'string') reason = d.message;
+            else if (d.rl_decision && d.rl_decision.reasoning) reason = d.rl_decision.reasoning;
+
+            document.getElementById('decisionContent').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <div style="color: var(--text-dim); margin-bottom: 4px;">Action</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--secondary); text-transform: uppercase;">${action}</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--text-dim); margin-bottom: 4px;">Reasoning</div>
+                        <div style="font-size: 0.9rem;">${reason}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadRLDiagnostics() {
+            const hBadge = document.getElementById('rlHealthBadge');
+            const scopeContainer = document.getElementById('scopeTextContainer');
+
+            try {
+                const [healthRes, scopeRes] = await Promise.all([
+                    fetch(`${API_BASE}/rl/health`),
+                    fetch(`${API_BASE}/rl/scope`)
+                ]);
+
+                const health = await healthRes.json();
+                const scope = await scopeRes.json();
+
+                hBadge.innerText = health.status === 'healthy' ? 'HEALTHY' : 'OFFLINE';
+                hBadge.className = `badge ${health.status === 'healthy' ? 'badge-live' : 'badge-warn'}`;
+
+                document.getElementById('rlModeBadge').innerText = health.demo_frozen ? 'DEMO-FROZEN' : 'LIVE';
+                document.getElementById('rlModeBadge').className = `badge ${health.demo_frozen ? 'badge-frozen' : 'badge-pink'}`;
+
+                // Build Scope Text layout
+                let scopeHtml = '';
+                for (const env in scope) {
+                    scopeHtml += `<p><strong>${env.toUpperCase()}:</strong> ${scope[env].join(', ')}</p>`;
+                }
+                scopeContainer.innerHTML = scopeHtml || '<p>No scope data available</p>';
+
+            } catch (e) {
+                console.error("RL Diag failed", e);
+                hBadge.innerText = 'ERROR';
+                scopeContainer.innerHTML = `<p style="color: var(--error);">Error communicating with backend</p>`;
+            }
+        }
+
+        async function testEndpoint(endpoint) {
+            const responseBox = document.getElementById('apiResponse');
+            responseBox.innerText = 'Fetching...';
+            try {
+                const res = await fetch(`${API_BASE}/${endpoint}`);
+                const data = await res.json();
+                responseBox.innerText = JSON.stringify(data, null, 2);
+            } catch (e) {
+                responseBox.innerText = `Error: ${e.message}`;
+            }
+        }
+
+        function addLocalLog(msg, type) {
+            const p = document.getElementById('logsPanel');
+            const div = document.createElement('div');
+            div.className = `log-line ${type}`;
+            div.innerHTML = `<span class="log-ts">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
+            p.insertBefore(div, p.firstChild);
+        }
+
+        async function onboardSimple() {
+            const name = document.getElementById('onboardApp').value.trim();
+            const repo = document.getElementById('onboardRepo').value.trim();
+            const runtime = document.getElementById('onboardRuntime').value;
+
+            // 1. Client-side Validation (mirroring onboarding_entry.py)
+            if (!name || !repo || !runtime) {
+                addLocalLog("Error: All fields are required", "error");
+                return;
+            }
+
+            // Regex: 3-50 lowercase alphanumeric characters with hyphens
+            if (!/^[a-z0-9-]{3,50}$/.test(name)) {
+                addLocalLog("Error: Name must be 3-50 lowercase alphanumeric/hyphens", "error");
+                return;
+            }
+
+            if (!repo.startsWith('http://') && !repo.startsWith('https://')) {
+                addLocalLog("Error: Repo URL must start with http/https", "error");
+                return;
+            }
+
+            addLocalLog(`Onboarding ${name}...`, 'warn');
+
+            try {
+                const res = await fetch(`${API_BASE}/agent/onboard`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        app_name: name,
+                        repo_url: repo,
+                        runtime: runtime
+                    })
+                });
+                const result = await res.json();
+
+                if (res.status === 200) {
+                    addLocalLog(`Success: ${result.message}`, 'success');
+                    // Clear fields on success
+                    document.getElementById('onboardApp').value = '';
+                    document.getElementById('onboardRepo').value = '';
+                    document.getElementById('onboardRuntime').value = '';
+                } else {
+                    addLocalLog(`Failure: ${result.message}`, 'error');
+                }
+            } catch (e) {
+                addLocalLog(`Onboard failed: ${e.message}`, 'error');
+            }
+        }
+
+        async function testRLRaw() {
+            const payload = document.getElementById('rawPayload').value;
+            const output = document.getElementById('testOutput');
+            addLocalLog("Testing raw RL API...", "warn");
+
+            try {
+                // We use the existing agent_runtime via the /api/decision endpoint for testing or add a dedicated proxy
+                const res = await fetch(`${API_BASE}/decision`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: payload
+                });
+                const data = await res.json();
+                output.innerText = JSON.stringify(data, null, 2);
+                addLocalLog("Test response received", "success");
+            } catch (e) {
+                output.innerText = `Error: ${e.message}`;
+            }
+        }
+    </script>
+</body>
+
+</html>
